@@ -2,6 +2,7 @@ ARG_VERSION_LONG = '--version'
 ARG_VERSION_SHORT = '-v'
 ARG_PRINTERS_PAGES_COUNTER_LONG = '--saveprncntrs'
 ARG_PRINTERS_PAGES_COUNTER_SHORT = '-spc'
+DRIVER_WAIT = 30
 
 DB_NAME = 'it-tools_dev'
 DB_USER = 'pgroot'
