@@ -1,6 +1,7 @@
 from selenium import webdriver    as wd
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
+from lxml import etree
 import dictionary.dic_message     as MESSAGE
 import dictionary.dic_error       as ERROR
 import time
@@ -42,6 +43,10 @@ class Printers:
                                'id_printer':'2','printer_model':'KYOCERA_ECOSYS_P2040dn','printer_location':'Не знаю'})
         printers_list.append({'ip_address': '172.16.0.223', 'type': '1','login':'Admin','password':'Admin',
                                'id_printer':'3','printer_model':'KYOCERA_ECOSYS_M3040dn','printer_location':'Не знаю'})
+        printers_list.append({'ip_address': '172.16.1.228', 'type': '1','login':'Admin','password':'Admin',
+                               'id_printer':'4','printer_model':'KYOCERA_ECOSYS_M2035dn','printer_location':'Старшие кредитницы'})
+        printers_list.append({'ip_address': '172.16.1.248', 'type': '1','login':'Admin','password':'Admin',
+                               'id_printer':'5','printer_model':'KYOCERA_ECOSYS_M2040dn','printer_location':'Бухгалтерия зарплата'})
         return printers_list
 
 class Printer:
@@ -55,6 +60,11 @@ class Printer:
             Printer.__get_counters_KYOCERA_ECOSYS_P2040dn(self,printer_info)
         if printer_model == 'KYOCERA_ECOSYS_M3040dn':
             Printer.__get_counters_KYOCERA_ECOSYS_M3040dn(self,printer_info)
+        if printer_model == 'KYOCERA_ECOSYS_M2035dn':
+            Printer.__get_counters_KYOCERA_ECOSYS_M2035dn(self,printer_info)
+        if printer_model == 'KYOCERA_ECOSYS_M2040dn':
+            Printer.__get_counters_KYOCERA_ECOSYS_M2040dn(self,printer_info)
+
     def __init_driver(self, ip_address):
         driver = None
         url = f'http://{ip_address}'
@@ -105,23 +115,12 @@ class Printer:
                        'scan_sum' :f'{content_table_td[26].text}'}
         driver.switch_to.parent_frame()
 
-        printer_counters = {'id_printer': f'{printer_info["id_printer"]}'}
+        printer_counters = {'id_device': f'{printer_info["id_printer"]}'}
         printer_counters.update(pr_couners)
         printer_counters.update(sc_counters)
 
         t_printer_counters = T_PRINTER_COUNTERS.table_printer_counters
-        fields = 'id_device, print_copy, ' \
-                 'print_print, print_fax, ' \
-                 'print_sum, scan_copy, ' \
-                 'scan_fax, scan_over, ' \
-                 'scan_sum'
-        data = f'{printer_counters["id_printer"]} ,{printer_counters["print_copy"]},' \
-               f'{printer_counters["print_print"]},{printer_counters["print_fax"]},' \
-               f'{printer_counters["print_sum"]}  ,{printer_counters["scan_copy"]},' \
-               f'{printer_counters["scan_fax"]}   ,{printer_counters["scan_over"]},' \
-               f'{printer_counters["scan_sum"]}'
-
-        t_printer_counters.save_to_table(self, fields, data)
+        t_printer_counters.save_to_table_by_dict(self, printer_counters)
     def __get_counters_KYOCERA_ECOSYS_P2040dn(self,printer_info):
 
         driver = Printer.__init_printer_type_1(self,printer_info)
@@ -134,16 +133,12 @@ class Printer:
         content_table_td = soup.find_all('td')
 
         pr_counters = {'print_sum':f'{content_table_td[15].text}'}
-        printer_counters = {'id_printer': f'{printer_info["id_printer"]}'}
+        printer_counters = {'id_device': f'{printer_info["id_printer"]}'}
         printer_counters.update(pr_counters)
 
         t_printer_counters = T_PRINTER_COUNTERS.table_printer_counters
-        fields = 'id_device, print_sum'
-        data = f'{printer_counters["id_printer"]} ,{printer_counters["print_sum"]}'
-
-        t_printer_counters.save_to_table(self, fields, data)
+        t_printer_counters.save_to_table_by_dict(self, printer_counters)
     def __get_counters_KYOCERA_ECOSYS_M3040dn(self,printer_info):
-        ret = {}
         driver = Printer.__init_printer_type_1(self, printer_info)
         driver.find_element(By.XPATH,'// *[ @ id = "devicestatuscolor"] / td[3] / a / div').click()
         driver.find_element(By.XPATH, "//div[@id='s81']//td[2]//span").click()
@@ -168,22 +163,53 @@ class Printer:
                        'scan_over':f'{content_table_td[16].text}',
                        'scan_sum' :f'{content_table_td[22].text}'}
         driver.switch_to.parent_frame()
-        printer_counters = {'id_printer': f'{printer_info["id_printer"]}'}
+        printer_counters = {'id_device': f'{printer_info["id_printer"]}'}
         printer_counters.update(pr_couners)
         printer_counters.update(sc_counters)
 
         t_printer_counters = T_PRINTER_COUNTERS.table_printer_counters
-        fields = 'id_device, print_copy, ' \
-                 'print_print, print_sum,'  \
-                 'scan_copy, scan_over,'    \
-                 'scan_sum'
-        data = f'{printer_counters["id_printer"]} ,{printer_counters["print_copy"]},' \
-               f'{printer_counters["print_print"]},{printer_counters["print_sum"]}, '  \
-               f'{printer_counters["scan_copy"]},{printer_counters["scan_over"]},'    \
-               f'{printer_counters["scan_sum"]}'
+        t_printer_counters.save_to_table_by_dict(self, printer_counters)
+    def __get_counters_KYOCERA_ECOSYS_M2035dn(self,printer_info):
+        Printer.__get_counters_KYOCERA_ECOSYS_M3040dn(self,printer_info)
+    def __get_counters_KYOCERA_ECOSYS_M2040dn(self,printer_info):
+        driver = Printer.__init_printer_type_1(self, printer_info)
+        driver.find_element(By.XPATH,'//*[@id="tm2"]/div[1]/span/span').click()
+        frame = driver.find_element(By.ID, 'toner')
+        driver.switch_to.frame(frame)
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        dom = etree.HTML(str(soup))
+        cartridge_filling = dom.xpath('//*[@id="contentrow"]/tbody/tr[3]/td[3]/text()')[0]
+        cartridge_filling = cartridge_filling[:-1]
+        driver.switch_to.parent_frame()
+        driver.find_element(By.XPATH, '//*[@id="s81"]').click()
 
-        t_printer_counters.save_to_table(self, fields, data)
+        frame = driver.find_element(By.NAME, 'deviceconfig')
+        driver.switch_to.frame(frame)
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        content_table = soup.find(id = 'contentrow')
+        content_table_td = soup.find_all('td')
+        pr_couners = {'print_copy' :f'{content_table_td[15].text}',
+                      'print_print':f'{content_table_td[22].text}',
+                      'print_sum'  :f'{content_table_td[28].text}'}
+        driver.switch_to.parent_frame()
 
+        frame = driver.find_element(By.NAME, 'deviceabout')
+        driver.switch_to.frame(frame)
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        content_table = soup.find(id='contentrow')
+        content_table_td = soup.find_all('td')
+        sc_counters = {'scan_copy':f'{content_table_td[8].text}',
+                       'scan_over':f'{content_table_td[14].text}',
+                       'scan_sum' :f'{content_table_td[20].text}'}
+        driver.switch_to.parent_frame()
+
+        printer_counters = {'id_device': f'{printer_info["id_printer"]}'}
+        printer_counters.update(pr_couners)
+        printer_counters.update(sc_counters)
+        printer_counters.update({'сartridge_filling':f'{cartridge_filling}'})
+
+        t_printer_counters = T_PRINTER_COUNTERS.table_printer_counters
+        t_printer_counters.save_to_table_by_dict(self,printer_counters)
 
 
 

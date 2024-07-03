@@ -15,7 +15,7 @@ class table_printer_counters:
             print(f"[ERROR] Ошибка в модуле [(table_printer_counters.py) table_printer_counters.__init_table()] {_ex}")
         # finally: print(f"[INFO] (table_v_reg_tmp.py) v_reg_tmp.__init_table() соединение с базой установлено")
         return connection
-    def save_to_table(self, fields, data):
+    def save_to_table_by_fields_data(self, fields, data):
 
         try:
             connection = table_printer_counters.__init_table()
@@ -30,14 +30,24 @@ class table_printer_counters:
 
         except Exception as _ex:
             print(f"[ERROR] Ошибка в модуле [(table_printer_counters.py) table_printer_counters.save_to_table()] {_ex}")
-        # print(f'{fields} {data}')
-        # conn = v_reg_tmp.__init_table()
-        # if conn:
-        #     with conn.cursor() as cursor:
-        #         for item in cam_list:
-        #             sql_str = f"INSERT INTO v_reg_tmp ({field_list}) VALUES ({item[0]},'{item[1]}',{item[2]},'{item[3]}','{item[4]}','{item[6]}','{item[7]}');"
-        #             try:
-        #                 cursor.execute(sql_str)
-        #             except Exception as _ex:
-        #                 print(f"[ERROR] Ошибка в модуле [(table_v_reg_tmp.py) v_reg_tmp.save_to_table()"
-        #                           f"] не удалось выполнить запрос {sql_str} : {_ex}")
+    def save_to_table_by_dict(self,dict):
+        fields = ''
+        data   = ''
+        for item in dict.keys():
+            fields = fields + f'{item},'
+        fields = fields[:-1]
+        for item in dict.values():
+            data = data + f'{item},'
+        data = data[:-1]
+        sql_str = f'INSERT INTO printer_counters ({fields}) VALUES ({data});'
+        try:
+            connection = table_printer_counters.__init_table()
+            if connection:
+                with connection.cursor() as cursor:
+                    try:
+                        cursor.execute(sql_str)
+                    except Exception as _ex:
+                        print(f"[ERROR] Ошибка в модуле [(table_printer_counters.py) "
+                              f"table_printer_counters.save_to_table_by_dict()] не удалось выполнить запрос {sql_str} {_ex}")
+        except Exception as _ex:
+            print(f"[ERROR] Ошибка в модуле [(table_printer_counters.py) table_printer_counters.save_to_table_by_dict()] {_ex}")
