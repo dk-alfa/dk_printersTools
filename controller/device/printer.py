@@ -38,28 +38,30 @@ class Printers:
         t_printer_counters.save_to_table(self, fields, data)
     def __get_priners_list_test(self):
         printers_list = []
-        # printers_list.append({'ip_address': '172.16.1.226', 'type': '1','login':'Admin','password':'Admin',
-        #                       'id_printer':'1','printer_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'Geely Продавцы'})
-        # printers_list.append({'ip_address': '172.16.0.232', 'type': '1','login':'Admin','password':'Admin',
-        #                        'id_printer':'2','printer_model':'KYOCERA_ECOSYS_P2040dn','printer_location':'Exeed возле выдачи'})
-        # printers_list.append({'ip_address': '172.16.0.223', 'type': '1','login':'Admin','password':'Admin',
-        #                        'id_printer':'3','printer_model':'KYOCERA_ECOSYS_M3040dn','printer_location':'Exeed продавцы возле входа'})
-        # printers_list.append({'ip_address': '172.16.1.228', 'type': '1','login':'Admin','password':'Admin',
-        #                        'id_printer':'4','printer_model':'KYOCERA_ECOSYS_M2035dn','printer_location':'Старшие кредитницы'})
-        # printers_list.append({'ip_address': '172.16.1.248', 'type': '1','login':'Admin','password':'Admin',
-        #                        'id_printer':'5','printer_model':'KYOCERA_ECOSYS_M2040dn','printer_location':'Бухгалтерия зарплата'})
-        # #----------------------------------------------
-        # printers_list.append({'ip_address': '172.16.1.217', 'type': '1','login':'Admin','password':'Admin',
-        #                      'id_printer':'6','printer_model':'KYOCERA_ECOSYS_M2135dn','printer_location':'Exeed кредитницы'})
-        # printers_list.append({'ip_address': '172.16.1.235', 'type': '1','login':'Admin','password':'Admin',
-        #                      'id_printer':'7','printer_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'ОК Света'})
-        # printers_list.append({'ip_address': '172.16.1.213', 'type': '1','login':'Admin','password':'Admin',
-        #                      'id_printer':'8','printer_model':'KYOCERA_ECOSYS_M2135dn','printer_location':'Кредитницы возле Светы'})
-        # printers_list.append({'ip_address': '172.16.1.215', 'type': '1','login':'Admin','password':'Admin',
-        #                      'id_printer':'9','printer_model':'KYOCERA_ECOSYS_M2040dn','printer_location':'Феликс'})
-        #----------------------------------------------
+        printers_list.append({'ip_address': '172.16.1.226', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'1','printer_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'Geely Продавцы'})
+        printers_list.append({'ip_address': '172.16.0.232', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'2','printer_model':'KYOCERA_ECOSYS_P2040dn','printer_location':'Exeed возле выдачи'})
+        printers_list.append({'ip_address': '172.16.0.223', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'3','printer_model':'KYOCERA_ECOSYS_M3040dn','printer_location':'Exeed продавцы возле входа'})
+        printers_list.append({'ip_address': '172.16.1.228', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'4','printer_model':'KYOCERA_ECOSYS_M2035dn','printer_location':'Старшие кредитницы'})
+        printers_list.append({'ip_address': '172.16.1.248', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'5','printer_model':'KYOCERA_ECOSYS_M2040dn','printer_location':'Бухгалтерия зарплата'})
+        printers_list.append({'ip_address': '172.16.1.217', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'6','printer_model':'KYOCERA_ECOSYS_M2135dn','printer_location':'Exeed кредитницы'})
+        printers_list.append({'ip_address': '172.16.1.235', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'7','printer_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'ОК Света'})
+        printers_list.append({'ip_address': '172.16.1.213', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'8','printer_model':'KYOCERA_ECOSYS_M2135dn','printer_location':'Кредитницы возле Светы'})
+        printers_list.append({'ip_address': '172.16.1.215', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'9','printer_model':'KYOCERA_ECOSYS_M2040dn','printer_location':'Феликс'})
         printers_list.append({'ip_address': '172.16.1.220', 'type': '1','login':'Admin','password':'Admin',
-                             'id_printer':'10','printer_model':'KYOCERA_FS_1035MFP','printer_location':'Стариков'})
+                              'id_printer':'10','printer_model':'KYOCERA_FS_1035MFP','printer_location':'Стариков'})
+        printers_list.append({'ip_address': '172.16.1.250', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'11','printer_model':'KYOCERA_ECOSYS_M2035dn','printer_location':'Журавлева'})
+        printers_list.append({'ip_address': '172.16.1.234', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'12','printer_model':'KYOCERA_FS_2100DN','printer_location':'Jeely Допники'})
 
         return printers_list
 
@@ -82,6 +84,8 @@ class Printer:
             Printer.__get_counters_KYOCERA_ECOSYS_M2040dn(self,printer_info)
         if printer_model == 'KYOCERA_FS_1035MFP':
             Printer.__get_counters_KYOCERA_FS_1035MFP(self,printer_info)
+        if printer_model == 'KYOCERA_FS_2100DN':
+            Printer.__get_counters_KYOCERA_FS_2100DN(self,printer_info)
     def __init_driver(self, ip_address):
         driver = None
         url = f'http://{ip_address}'
@@ -109,6 +113,29 @@ class Printer:
         frame = driver.find_element(By.NAME,'main')
         driver.switch_to.frame(frame)
         return driver
+    def __login_to_printer(self,driver,printer_info):
+        driver.find_element(By.XPATH, '//*[@id="arg01_UserName"]').send_keys(printer_info['login'])
+        driver.find_element(By.XPATH, '//*[@id="arg02_Password"]').send_keys(printer_info['password'])
+        driver.find_element(By.XPATH, '//*[@id="s10"]/table/tbody/tr[2]/td[3]/table/tbody/tr[5]/td/input').click()
+    def __get_content(self,driver):
+            soup = BeautifulSoup(driver.page_source, 'html.parser')
+            dom = etree.HTML(str(soup))
+            content = dom.xpath('//*[@id="content"]/table/tbody/tr/td/script[1]/text()')
+            content_string = content[0]
+            return content_string
+    def __get_count(self,content_str, selector):
+        # значение счетчика содержится в  sData[x], sData[x] встречается несколько раз
+        ret = None
+        matches = re.finditer(selector, content_str)
+        indices = [match.start() for match in matches]
+        for start_position in indices:
+            end_position = content_str.find(';', start_position)
+            tmp_str = content_str[start_position:end_position]
+            mtch = re.finditer('"', tmp_str)
+            ind = [match.start() for match in mtch]
+            find_str = tmp_str[ind[0] + 1:ind[1]]
+            if find_str: ret = find_str  # print(f'[{find_str}]')
+        return ret
     def __get_counters_KYOCERA_ECOSYS_M2735dn(self,printer_info):
         driver = Printer.__init_printer_type_1(self,printer_info)
         driver.find_element(By.XPATH,'//*[@id="tm2"]/div[1]/span').click()
@@ -154,7 +181,8 @@ class Printer:
         content_table = soup.find(id = 'contentrow')
         content_table_td = soup.find_all('td')
 
-        pr_counters = {'print_sum':f'{content_table_td[15].text}'}
+        pr_counters = {'print_print':f'{content_table_td[15].text}',
+                       'print_sum'  :f'{content_table_td[15].text}'}
         printer_counters = {'id_device': f'{printer_info["id_printer"]}'}
         printer_counters.update(pr_counters)
 
@@ -234,44 +262,26 @@ class Printer:
         t_printer_counters = T_PRINTER_COUNTERS.table_printer_counters
         t_printer_counters.save_to_table_by_dict(self,printer_counters)
     def __get_counters_KYOCERA_FS_1035MFP(self,printer_info):
-        def get_count(content_str,selector):
-            # значение счетчика содержится в  sData[x], sData[x] встречается несколько раз
-            ret = None
-            matches = re.finditer(selector, content_str)
-            indices = [match.start() for match in matches]
-            for start_position in indices:
-                end_position = content_str.find(';', start_position)
-                tmp_str = content_str[start_position:end_position]
-                mtch = re.finditer('"', tmp_str)
-                ind = [match.start() for match in mtch]
-                find_str = tmp_str[ind[0]+1:ind[1]]
-                if find_str: ret = find_str #print(f'[{find_str}]')
-            return ret
-        def get_content(in_content):
-
-            driver.find_element(By.XPATH, in_content).click()
-            soup = BeautifulSoup(driver.page_source, 'html.parser')
-            dom = etree.HTML(str(soup))
-            content = dom.xpath('//*[@id="content"]/table/tbody/tr/td/script[1]/text()')
-            content_string = content[0]
-            return content_string
-
         driver = Printer.__init_printer_type_2(self, printer_info)
         driver.find_element(By.XPATH,'//*[@id="parentcounters"]').click()
 
-        content_string = get_content('//*[@id="counters"]/div[1]/a')
-        print_copy  = get_count(content_string, 'sData\\[0\\]')
-        print_print = get_count(content_string, 'sData\\[1\\]')
-        print_sum   = get_count(content_string, 'sData\\[3\\]')
+        driver.find_element(By.XPATH,'//*[@id="counters"]/div[1]/a').click()
+        content_string = Printer.__get_content(self,driver)
+
+        print_copy  = Printer.__get_count(self,content_string, 'sData\\[0\\]')
+        print_print = Printer.__get_count(self,content_string, 'sData\\[1\\]')
+        print_sum   = Printer.__get_count(self,content_string, 'sData\\[3\\]')
 
         pr_counters = {'print_copy' :f'{print_copy}',
                       'print_print':f'{print_print}',
                       'print_sum'  :f'{print_sum}'}
 
-        content_string = get_content('//*[@id="contex"]/a')
-        scan_copy  = get_count(content_string, 'sData\\[0\\]')
-        scan_over  = get_count(content_string, 'sData\\[1\\]')
-        scan_sum   = get_count(content_string, 'sData\\[3\\]')
+        driver.find_element(By.XPATH, '//*[@id="contex"]/a').click()
+        content_string = Printer.__get_content(self, driver)
+
+        scan_copy  = Printer.__get_count(self,content_string, 'sData\\[0\\]')
+        scan_over  = Printer.__get_count(self,content_string, 'sData\\[1\\]')
+        scan_sum   = Printer.__get_count(self,content_string, 'sData\\[3\\]')
 
         sc_counters = {'scan_copy' :f'{scan_copy}',
                       'scan_over':f'{scan_over}',
@@ -283,6 +293,26 @@ class Printer:
 
         t_printer_counters = T_PRINTER_COUNTERS.table_printer_counters
         t_printer_counters.save_to_table_by_dict(self,printer_counters)
+    def __get_counters_KYOCERA_FS_2100DN(self,printer_info):
+        driver = Printer.__init_printer_type_1(self, printer_info)
+        Printer.__login_to_printer(self,driver,printer_info)
+        driver.find_element(By.XPATH,'//*[@id="settingcolor"]/td[3]/a').click()
+        driver.switch_to.default_content()
+        frame = driver.find_element(By.NAME, 'main')
+        driver.switch_to.frame(frame)
+        driver.find_element(By.XPATH, '//*[@id="parentcounters"]').click()
+        content_string = Printer.__get_content(self,driver)
+        print_print = Printer.__get_count(self,content_string,'sData\\[0\\]')
+
+        pr_counters = {'print_print':f'{print_print}',
+                       'print_sum'  :f'{print_print}'}
+
+        printer_counters = {'id_device': f'{printer_info["id_printer"]}'}
+        printer_counters.update(pr_counters)
+
+        t_printer_counters = T_PRINTER_COUNTERS.table_printer_counters
+        t_printer_counters.save_to_table_by_dict(self,printer_counters)
+
 
 
 
