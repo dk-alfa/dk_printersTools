@@ -17,25 +17,10 @@ class Printers:
                 try:
                     printer = Printer
                     printer_counters = printer.get_counters(self,printer_info)
-                    # Printers.__save_printer_counters(self,printer_counters)
                 except Exception as _ex:
                     print(f"{ERROR.CANT_CREATE_PRINTER} {_ex}")
         else:
             print(f"{MESSAGE.INFO_PRINTERS_LIST_IS_EMPTY} (Printers.get_counters)")
-    # def __save_printer_counters(self,printer_counters):
-    #     # print(printer_counters)
-    #     t_printer_counters = T_PRINTER_COUNTERS.table_printer_counters
-    #     fields = 'id_device, print_copy, ' \
-    #              'print_print, print_fax, ' \
-    #              'print_sum, scan_copy, ' \
-    #              'scan_fax, scan_over, ' \
-    #              'scan_sum, сartridge_filling'
-    #     data = f'{printer_counters["id_printer"]} ,{printer_counters["print_copy"]},' \
-    #            f'{printer_counters["print_print"]},{printer_counters["print_fax"]},' \
-    #            f'{printer_counters["print_sum"]}  ,{printer_counters["scan_copy"]},' \
-    #            f'{printer_counters["scan_fax"]}   ,{printer_counters["scan_over"]},' \
-    #            f'{printer_counters["scan_sum"]}   ,{printer_counters["cartridge_filling"]}'
-    #     t_printer_counters.save_to_table(self, fields, data)
     def __get_priners_list_test(self):
         printers_list = []
         printers_list.append({'ip_address': '172.16.1.226', 'type': '1','login':'Admin','password':'Admin',
@@ -92,6 +77,22 @@ class Printers:
                               'id_printer':'26','printer_model':'KYOCERA_ECOSYS_M2135dn','printer_location':'Toyota Бухгалтерия Аня'})
         printers_list.append({'ip_address': '172.16.1.233', 'type': '1','login':'Admin','password':'Admin',
                               'id_printer':'27','printer_model':'KYOCERA_ECOSYS_M3040dn','printer_location':'Toyota Логисты'})
+        printers_list.append({'ip_address': '172.16.1.231', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'28','printer_model':'KYOCERA_ECOSYS_P2040dn','printer_location':'Toyota Склад'})
+        printers_list.append({'ip_address': '172.16.1.232', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'29','printer_model':'KYOCERA_FS_1035MFP'   ,'printer_location':'Toyota IT отдел'})
+        printers_list.append({'ip_address': '172.16.1.241', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'30','printer_model':'KYOCERA_ECOSYS_FS_1370dn','printer_location':'Toyota IT отдел 1с'})
+        printers_list.append({'ip_address': '172.16.1.216', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'31','printer_model':'KYOCERA_ECOSYS_P2135dn','printer_location':'Toyota Ремзона мастер'})
+        printers_list.append({'ip_address': '172.16.1.243', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'32','printer_model':'KYOCERA_ECOSYS_P5021dn','printer_location':'Toyota Цветной у Кирилла'})
+        printers_list.append({'ip_address': '172.16.1.221', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'33','printer_model':'KYOCERA_ECOSYS_M3145dn'    ,'printer_location':'Tank сервис'})
+        printers_list.append({'ip_address': '172.16.1.247', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'34','printer_model':'KYOCERA_ECOSYS_M3040dn','printer_location':'Tank ресепшн'})
+        printers_list.append({'ip_address': '172.16.1.218', 'type': '1','login':'Admin','password':'Admin',
+                              'id_printer':'35','printer_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'Tank кредит'})
 
         return printers_list
 
@@ -126,8 +127,10 @@ class Printer:
             Printer.__get_counters_KYOCERA_ECOSYS_P3150dn(self,printer_info)
         if printer_model == 'KYOCERA_ECOSYS_FS_1370dn':
             Printer.__get_counters_KYOCERA_FS_1370dn(self,printer_info)
-
-
+        if printer_model == 'KYOCERA_ECOSYS_P2135dn':
+            Printer.__get_counters_KYOCERA_ECOSYS_P2135dn(self,printer_info)
+        if printer_model == 'KYOCERA_ECOSYS_P5021dn':
+            Printer.__get_counters_KYOCERA_ECOSYS_P5021dn(self,printer_info)
     def __init_driver(self, ip_address):
         driver = None
         url = f'http://{ip_address}'
@@ -447,6 +450,50 @@ class Printer:
                       'print_sum'    :f'{print_print}'}
 
         Printer.__save_to_table(self, printer_info, pr_counters)
+    def __get_counters_KYOCERA_ECOSYS_P2135dn(self,printer_info):
+        driver = Printer.__init_printer_type_1(self, printer_info)
+        driver.find_element(By.XPATH, '//*[@id="devicestatuscolor"]/td[3]/a/div').click()
+        driver.find_element(By.XPATH, '//*[@id="counterdevice"]/div/div[2]/u/a/span').click()
+
+        frame = driver.find_element(By.NAME, 'deviceconfig')
+        driver.switch_to.frame(frame)
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        content_table = soup.find(id='contentrow')
+        content_table_td = soup.find_all('td')
+
+        pr_counters = {'print_print':f'{content_table_td[23].text}',
+                      'print_sum'  :f'{content_table_td[23].text}'}
+
+        Printer.__save_to_table(self, printer_info, pr_counters)
+    def __get_counters_KYOCERA_ECOSYS_P5021dn(self, printer_info):
+        driver = Printer.__init_printer_type_1(self, printer_info)
+        driver.find_element(By.XPATH, '//*[@id="tm2"]/div[1]/span').click()
+        driver.find_element(By.XPATH, '//*[@id="s81"]').click()
+
+        frame = driver.find_element(By.NAME, 'toner')
+        driver.switch_to.frame(frame)
+
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        content_table = soup.find(id='tonertab')
+        content_table_td = soup.find_all('td')
+        сartridge_filling = content_table_td[12].text[:-1]
+        driver.switch_to.parent_frame()
+
+        frame = driver.find_element(By.NAME, 'deviceconfig')
+        driver.switch_to.frame(frame)
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        content_table = soup.find(id='contentrow')
+        content_table_td = soup.find_all('td')
+
+        pr_counters = {'print_print':f'{content_table_td[14].text}',
+                       'print_fax'  : f'{content_table_td[15].text}',
+                       'print_sum'  :f'{content_table_td[16].text}'}
+        pr_counters.update({'сartridge_filling':f'{сartridge_filling}'})
+        Printer.__save_to_table(self, printer_info, pr_counters)
+
+
+
+
 
 
 
