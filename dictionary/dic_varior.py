@@ -8,3 +8,6 @@ DB_NAME = 'it-tools_dev'
 DB_USER = 'pgroot'
 DB_PASS = 'nhbvbnbk'
 DB_HOST = '192.168.22.45'
+
+DEVICE_TYPE_PRINTER = 1
+DEVICE_TYPE_MFU     = 2

@@ -6,12 +6,15 @@ import dictionary.dic_message     as MESSAGE
 import dictionary.dic_error       as ERROR
 import time
 import controller.database.table_printer_counters as T_PRINTER_COUNTERS
+import controller.database.table_devices          as T_DEVICES
 import dictionary.dic_varior as VARIOR
 import re
 
 class Printers:
     def get_counters(self):
-        printers_list = Printers.__get_priners_list_test(self)
+        # printers_list = Printers.__get_priners_list_test(self)
+        defice_type = (VARIOR.DEVICE_TYPE_PRINTER,VARIOR.DEVICE_TYPE_MFU)
+        printers_list = Printers.__get_printers_list_from_table(self,defice_type)
         if printers_list:
             for printer_info in printers_list:
                 try:
@@ -24,113 +27,121 @@ class Printers:
     def __get_priners_list_test(self):
         printers_list = []
         printers_list.append({'ip_address': '172.16.1.226', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'1','printer_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'Geely Продавцы справа'})
+                              'id_device':'1','device_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'Geely Продавцы справа'})
         printers_list.append({'ip_address': '172.16.0.232', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'2','printer_model':'KYOCERA_ECOSYS_P2040dn','printer_location':'Exeed возле выдачи'})
-        printers_list.append({'ip_address': '172.16.0.223', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'3','printer_model':'KYOCERA_ECOSYS_M3040dn','printer_location':'Exeed продавцы возле входа'})
-        printers_list.append({'ip_address': '172.16.1.228', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'4','printer_model':'KYOCERA_ECOSYS_M2035dn','printer_location':'Старшие кредитницы'})
-        printers_list.append({'ip_address': '172.16.1.248', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'5','printer_model':'KYOCERA_ECOSYS_M2040dn','printer_location':'Бухгалтерия зарплата'})
-        printers_list.append({'ip_address': '172.16.1.217', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'6','printer_model':'KYOCERA_ECOSYS_M2135dn','printer_location':'Exeed кредитницы'})
-        printers_list.append({'ip_address': '172.16.1.235', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'7','printer_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'ОК Света'})
-        printers_list.append({'ip_address': '172.16.1.213', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'8','printer_model':'KYOCERA_ECOSYS_M2135dn','printer_location':'Кредитницы возле Светы'})
-        printers_list.append({'ip_address': '172.16.1.215', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'9','printer_model':'KYOCERA_ECOSYS_M2040dn','printer_location':'Феликс'})
-        printers_list.append({'ip_address': '172.16.1.220', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'10','printer_model':'KYOCERA_FS_1035MFP'   ,'printer_location':'Стариков'})
-        printers_list.append({'ip_address': '172.16.1.250', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'11','printer_model':'KYOCERA_ECOSYS_M2035dn','printer_location':'Журавлева'})
-        printers_list.append({'ip_address': '172.16.1.229', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'12','printer_model':'HP_COLOR_LJ_M254nw'    ,'printer_location':'Jeely продавцы слева'})
-        printers_list.append({'ip_address': '172.16.1.249', 'type': '1','login':'Admin','password':'Admin',
-                               'id_printer':'13','printer_model':'KYOCERA_ECOSYS_M2635dn','printer_location':'Toyota кредитницы'})
-        printers_list.append({'ip_address': '172.16.1.234', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'14','printer_model':'KYOCERA_FS_2100DN'    ,'printer_location':'Jeely допники'})
-        printers_list.append({'ip_address': '172.16.1.238', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'15','printer_model':'KYOCERA_ECOSYS_M3145dn'    ,'printer_location':'Toyota Ахметдинов'})
-        printers_list.append({'ip_address': '172.16.1.240', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'16','printer_model':'KYOCERA_ECOSYS_M3145dn'    ,'printer_location':'Toyota Сервис сзади'})
-        printers_list.append({'ip_address': '172.16.1.237', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'17','printer_model':'KYOCERA_ECOSYS_M3145dn'    ,'printer_location':'Toyota Подержанные сзади'})
-        printers_list.append({'ip_address': '172.16.1.244', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'18','printer_model':'KYOCERA_ECOSYS_P2040dn','printer_location':'Toyota подержанные РОП'})
-        printers_list.append({'ip_address': '172.16.1.236', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'19','printer_model':'KYOCERA_ECOSYS_P3150dn','printer_location':'Toyota подержанные возле ОПРК'})
-        printers_list.append({'ip_address': '172.16.1.224', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'20','printer_model':'KYOCERA_ECOSYS_FS_1370dn','printer_location':'Toyota сервис левый'})
-        printers_list.append({'ip_address': '172.16.1.239', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'21','printer_model':'KYOCERA_ECOSYS_M2135dn','printer_location':'Toyota сервис правый'})
-        printers_list.append({'ip_address': '172.16.1.227', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'22','printer_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'Toyota Алина'})
-        printers_list.append({'ip_address': '172.16.1.242', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'23','printer_model':'KYOCERA_FS_1035MFP'   ,'printer_location':'Toyota Callcenter'})
-        printers_list.append({'ip_address': '172.16.1.214', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'24','printer_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'Toyota Бухгалтерия ЕА'})
-        printers_list.append({'ip_address': '172.16.1.219', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'25','printer_model':'KYOCERA_ECOSYS_M2040dn','printer_location':'Toyota Бухгалтерия Рузана'})
-        printers_list.append({'ip_address': '172.16.0.161', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'26','printer_model':'KYOCERA_ECOSYS_M2135dn','printer_location':'Toyota Бухгалтерия Аня'})
-        printers_list.append({'ip_address': '172.16.1.233', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'27','printer_model':'KYOCERA_ECOSYS_M3040dn','printer_location':'Toyota Логисты'})
-        printers_list.append({'ip_address': '172.16.1.231', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'28','printer_model':'KYOCERA_ECOSYS_P2040dn','printer_location':'Toyota Склад'})
-        printers_list.append({'ip_address': '172.16.1.232', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'29','printer_model':'KYOCERA_FS_1035MFP'   ,'printer_location':'Toyota IT отдел'})
-        printers_list.append({'ip_address': '172.16.1.241', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'30','printer_model':'KYOCERA_ECOSYS_FS_1370dn','printer_location':'Toyota IT отдел 1с'})
-        printers_list.append({'ip_address': '172.16.1.216', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'31','printer_model':'KYOCERA_ECOSYS_P2135dn','printer_location':'Toyota Ремзона мастер'})
-        printers_list.append({'ip_address': '172.16.1.243', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'32','printer_model':'KYOCERA_ECOSYS_P5021dn','printer_location':'Toyota Цветной у Кирилла'})
-        printers_list.append({'ip_address': '172.16.1.221', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'33','printer_model':'KYOCERA_ECOSYS_M3145dn'    ,'printer_location':'Tank сервис'})
-        printers_list.append({'ip_address': '172.16.1.247', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'34','printer_model':'KYOCERA_ECOSYS_M3040dn','printer_location':'Tank ресепшн'})
-        printers_list.append({'ip_address': '172.16.1.218', 'type': '1','login':'Admin','password':'Admin',
-                              'id_printer':'35','printer_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'Tank кредит'})
+                              'id_device':'2','device_model':'KYOCERA_ECOSYS_P2040dn','printer_location':'Exeed возле выдачи'})
+        # printers_list.append({'ip_address': '172.16.0.223', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'3','device_model':'KYOCERA_ECOSYS_M3040dn','printer_location':'Exeed продавцы возле входа'})
+        # printers_list.append({'ip_address': '172.16.1.228', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'4','device_model':'KYOCERA_ECOSYS_M2035dn','printer_location':'Старшие кредитницы'})
+        # printers_list.append({'ip_address': '172.16.1.248', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'5','device_model':'KYOCERA_ECOSYS_M2040dn','printer_location':'Бухгалтерия зарплата'})
+        # printers_list.append({'ip_address': '172.16.1.217', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'6','device_model':'KYOCERA_ECOSYS_M2135dn','printer_location':'Exeed кредитницы'})
+        # printers_list.append({'ip_address': '172.16.1.235', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'7','device_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'ОК Света'})
+        # printers_list.append({'ip_address': '172.16.1.213', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'8','device_model':'KYOCERA_ECOSYS_M2135dn','printer_location':'Кредитницы возле Светы'})
+        # printers_list.append({'ip_address': '172.16.1.215', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'9','device_model':'KYOCERA_ECOSYS_M2040dn','printer_location':'Феликс'})
+        # printers_list.append({'ip_address': '172.16.1.220', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'10','device_model':'KYOCERA_FS_1035MFP'   ,'printer_location':'Стариков'})
+        # printers_list.append({'ip_address': '172.16.1.250', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'11','device_model':'KYOCERA_ECOSYS_M2035dn','printer_location':'Журавлева'})
+        # printers_list.append({'ip_address': '172.16.1.229', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'12','device_model':'HP_COLOR_LJ_M254nw'    ,'printer_location':'Jeely продавцы слева'})
+        # printers_list.append({'ip_address': '172.16.1.249', 'type': '1','login':'Admin','password':'Admin',
+        #                        'id_device':'13','device_model':'KYOCERA_ECOSYS_M2635dn','printer_location':'Toyota кредитницы'})
+        # printers_list.append({'ip_address': '172.16.1.234', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'14','device_model':'KYOCERA_FS_2100DN'    ,'printer_location':'Jeely допники'})
+        # printers_list.append({'ip_address': '172.16.1.238', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'15','device_model':'KYOCERA_ECOSYS_M3145dn'    ,'printer_location':'Toyota Ахметдинов'})
+        # printers_list.append({'ip_address': '172.16.1.240', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'16','device_model':'KYOCERA_ECOSYS_M3145dn'    ,'printer_location':'Toyota Сервис сзади'})
+        # printers_list.append({'ip_address': '172.16.1.237', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'17','device_model':'KYOCERA_ECOSYS_M3145dn'    ,'printer_location':'Toyota Подержанные сзади'})
+        # printers_list.append({'ip_address': '172.16.1.244', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'18','device_model':'KYOCERA_ECOSYS_P2040dn','printer_location':'Toyota подержанные РОП'})
+        # printers_list.append({'ip_address': '172.16.1.236', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'19','device_model':'KYOCERA_ECOSYS_P3150dn','printer_location':'Toyota подержанные возле ОПРК'})
+        # printers_list.append({'ip_address': '172.16.1.224', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'20','device_model':'KYOCERA_ECOSYS_FS_1370dn','printer_location':'Toyota сервис левый'})
+        # printers_list.append({'ip_address': '172.16.1.239', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'21','device_model':'KYOCERA_ECOSYS_M2135dn','printer_location':'Toyota сервис правый'})
+        # printers_list.append({'ip_address': '172.16.1.227', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'22','device_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'Toyota Алина'})
+        # printers_list.append({'ip_address': '172.16.1.242', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'23','device_model':'KYOCERA_FS_1035MFP'   ,'printer_location':'Toyota Callcenter'})
+        # printers_list.append({'ip_address': '172.16.1.214', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'24','device_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'Toyota Бухгалтерия ЕА'})
+        # printers_list.append({'ip_address': '172.16.1.219', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'25','device_model':'KYOCERA_ECOSYS_M2040dn','printer_location':'Toyota Бухгалтерия Рузана'})
+        # printers_list.append({'ip_address': '172.16.0.161', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'26','device_model':'KYOCERA_ECOSYS_M2135dn','printer_location':'Toyota Бухгалтерия Аня'})
+        # printers_list.append({'ip_address': '172.16.1.233', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'27','device_model':'KYOCERA_ECOSYS_M3040dn','printer_location':'Toyota Логисты'})
+        # printers_list.append({'ip_address': '172.16.1.231', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'28','device_model':'KYOCERA_ECOSYS_P2040dn','printer_location':'Toyota Склад'})
+        # printers_list.append({'ip_address': '172.16.1.232', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'29','device_model':'KYOCERA_FS_1035MFP'   ,'printer_location':'Toyota IT отдел'})
+        # printers_list.append({'ip_address': '172.16.1.241', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'30','device_model':'KYOCERA_ECOSYS_FS_1370dn','printer_location':'Toyota IT отдел 1с'})
+        # printers_list.append({'ip_address': '172.16.1.216', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'31','device_model':'KYOCERA_ECOSYS_P2135dn','printer_location':'Toyota Ремзона мастер'})
+        # printers_list.append({'ip_address': '172.16.1.243', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'32','device_model':'KYOCERA_ECOSYS_P5021dn','printer_location':'Toyota Цветной у Кирилла'})
+        # printers_list.append({'ip_address': '172.16.1.221', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'33','device_model':'KYOCERA_ECOSYS_M3145dn'    ,'printer_location':'Tank сервис'})
+        # printers_list.append({'ip_address': '172.16.1.247', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'34','device_model':'KYOCERA_ECOSYS_M3040dn','printer_location':'Tank ресепшн'})
+        # printers_list.append({'ip_address': '172.16.1.218', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'35','device_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'Tank кредит'})
+        # printers_list.append({'ip_address': '172.16.1.246', 'type': '1','login':'Admin','password':'Admin',
+        #                       'id_device':'36','device_model':'BROTHER_MFC_L2740DW','printer_location':'Tank маркетинг'})
 
         return printers_list
-
+    def __get_printers_list_from_table(self,device_type):
+        printers_list = []
+        t_devices = T_DEVICES.table_devices
+        printers_list = t_devices.get_devices_list(self,device_type)
+        return printers_list
 class Printer:
     def get_counters(self,printer_info):
         #printer_counters = []
         ret = {}
-        printer_model = printer_info['printer_model']
-        if printer_model == 'KYOCERA_ECOSYS_M2735dn':
+        device_model = printer_info['device_model']
+        if device_model == 'KYOCERA_ECOSYS_M2735dn':
             Printer.__get_counters_KYOCERA_ECOSYS_M2735dn(self,printer_info)
-        if printer_model == 'KYOCERA_ECOSYS_P2040dn':
+        if device_model == 'KYOCERA_ECOSYS_P2040dn':
             Printer.__get_counters_KYOCERA_ECOSYS_P2040dn(self,printer_info)
-        if printer_model == 'KYOCERA_ECOSYS_M3040dn':
+        if device_model == 'KYOCERA_ECOSYS_M3040dn':
             Printer.__get_counters_KYOCERA_ECOSYS_M3040dn(self,printer_info)
-        if printer_model == 'KYOCERA_ECOSYS_M2035dn':
+        if device_model == 'KYOCERA_ECOSYS_M2035dn':
             Printer.__get_counters_KYOCERA_ECOSYS_M2035dn(self,printer_info)
-        if printer_model == 'KYOCERA_ECOSYS_M2040dn':
+        if device_model == 'KYOCERA_ECOSYS_M2040dn':
             Printer.__get_counters_KYOCERA_ECOSYS_M2040dn(self,printer_info)
-        if printer_model == 'KYOCERA_ECOSYS_M2135dn':
+        if device_model == 'KYOCERA_ECOSYS_M2135dn':
             Printer.__get_counters_KYOCERA_ECOSYS_M2040dn(self,printer_info)
-        if printer_model == 'KYOCERA_FS_1035MFP':
+        if device_model == 'KYOCERA_FS_1035MFP':
             Printer.__get_counters_KYOCERA_FS_1035MFP(self,printer_info)
-        if printer_model == 'KYOCERA_FS_2100DN':
+        if device_model == 'KYOCERA_FS_2100DN':
             Printer.__get_counters_KYOCERA_FS_2100DN(self,printer_info)
-        if printer_model == 'HP_COLOR_LJ_M254nw':
+        if device_model == 'HP_COLOR_LJ_M254nw':
             Printer.__get_counters_HP_COLOR_LJ_M254nw(self,printer_info)
-        if printer_model == 'KYOCERA_ECOSYS_M2635dn':
+        if device_model == 'KYOCERA_ECOSYS_M2635dn':
             Printer.__get_counters_KYOCERA_ECOSYS_M2735dn(self,printer_info)
-        if printer_model == 'KYOCERA_ECOSYS_M3145dn':
+        if device_model == 'KYOCERA_ECOSYS_M3145dn':
             Printer.__get_counters_KYOCERA_ECOSYS_M3145dn(self,printer_info)
-        if printer_model == 'KYOCERA_ECOSYS_P3150dn':
+        if device_model == 'KYOCERA_ECOSYS_P3150dn':
             Printer.__get_counters_KYOCERA_ECOSYS_P3150dn(self,printer_info)
-        if printer_model == 'KYOCERA_ECOSYS_FS_1370dn':
+        if device_model == 'KYOCERA_ECOSYS_FS_1370dn':
             Printer.__get_counters_KYOCERA_FS_1370dn(self,printer_info)
-        if printer_model == 'KYOCERA_ECOSYS_P2135dn':
+        if device_model == 'KYOCERA_ECOSYS_P2135dn':
             Printer.__get_counters_KYOCERA_ECOSYS_P2135dn(self,printer_info)
-        if printer_model == 'KYOCERA_ECOSYS_P5021dn':
+        if device_model == 'KYOCERA_ECOSYS_P5021dn':
             Printer.__get_counters_KYOCERA_ECOSYS_P5021dn(self,printer_info)
+        if device_model == 'BROTHER_MFC_L2740DW':
+            Printer.__get_counters_BROTHER_MFC_L2740DW(self,printer_info)
     def __init_driver(self, ip_address):
         driver = None
         url = f'http://{ip_address}'
@@ -185,7 +196,7 @@ class Printer:
             if find_str: ret = find_str  # print(f'[{find_str}]')
         return ret
     def __save_to_table(self,printer_info,pr_counters):
-        printer_counters = {'id_device': f'{printer_info["id_printer"]}'}
+        printer_counters = {'id_device': f'{printer_info["id_device"]}'}
         printer_counters.update(pr_counters)
 
         t_printer_counters = T_PRINTER_COUNTERS.table_printer_counters
@@ -218,7 +229,7 @@ class Printer:
                        'scan_sum' :f'{content_table_td[26].text}'}
         driver.switch_to.parent_frame()
 
-        printer_counters = {'id_device': f'{printer_info["id_printer"]}'}
+        printer_counters = {'id_device': f'{printer_info["id_device"]}'}
         printer_counters.update(pr_couners)
         printer_counters.update(sc_counters)
 
@@ -237,7 +248,7 @@ class Printer:
 
         pr_counters = {'print_print':f'{content_table_td[15].text}',
                        'print_sum'  :f'{content_table_td[15].text}'}
-        printer_counters = {'id_device': f'{printer_info["id_printer"]}'}
+        printer_counters = {'id_device': f'{printer_info["id_device"]}'}
         printer_counters.update(pr_counters)
 
         t_printer_counters = T_PRINTER_COUNTERS.table_printer_counters
@@ -267,7 +278,7 @@ class Printer:
                        'scan_over':f'{content_table_td[16].text}',
                        'scan_sum' :f'{content_table_td[22].text}'}
         driver.switch_to.parent_frame()
-        printer_counters = {'id_device': f'{printer_info["id_printer"]}'}
+        printer_counters = {'id_device': f'{printer_info["id_device"]}'}
         printer_counters.update(pr_couners)
         printer_counters.update(sc_counters)
 
@@ -312,7 +323,7 @@ class Printer:
                        'scan_sum' :f'{content_table_td[20].text}'}
         driver.switch_to.parent_frame()
 
-        printer_counters = {'id_device': f'{printer_info["id_printer"]}'}
+        printer_counters = {'id_device': f'{printer_info["id_device"]}'}
         printer_counters.update(pr_counters)
         printer_counters.update(sc_counters)
         printer_counters.update({'сartridge_filling':f'{cartridge_filling}'})
@@ -352,7 +363,7 @@ class Printer:
         # printer_counters.update(pr_counters)
         # printer_counters.update(sc_counters)
         #
-        # printer_counters = {'id_device': f'{printer_info["id_printer"]}'}
+        # printer_counters = {'id_device': f'{printer_info["id_device"]}'}
         #
         #
         # t_printer_counters = T_PRINTER_COUNTERS.table_printer_counters
@@ -490,6 +501,16 @@ class Printer:
                        'print_sum'  :f'{content_table_td[16].text}'}
         pr_counters.update({'сartridge_filling':f'{сartridge_filling}'})
         Printer.__save_to_table(self, printer_info, pr_counters)
+    def __get_counters_BROTHER_MFC_L2740DW(self, printer_info):
+        # driver = Printer.__init_printer_type_3(self, printer_info)
+        # driver.find_element(By.XPATH, '//*[@id="subMenu"]/div[3]/a').click()
+        #
+        # driver.switch_to.default_content()
+        #
+        # soup = BeautifulSoup(driver.page_source, 'html.parser')
+        # dom = etree.HTML(str(soup))
+        # content = dom.xpath('//dd')
+        print('BROTHER_MFC_L2740DW')
 
 
 

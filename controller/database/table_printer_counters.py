@@ -51,3 +51,4 @@ class table_printer_counters:
                               f"table_printer_counters.save_to_table_by_dict()] не удалось выполнить запрос {sql_str} {_ex}")
         except Exception as _ex:
             print(f"[ERROR] Ошибка в модуле [(table_printer_counters.py) table_printer_counters.save_to_table_by_dict()] {_ex}")
+
