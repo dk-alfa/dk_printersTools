@@ -24,6 +24,7 @@ class Printers:
                     print(f"{ERROR.CANT_CREATE_PRINTER} {_ex}")
         else:
             print(f"{MESSAGE.INFO_PRINTERS_LIST_IS_EMPTY} (Printers.get_counters)")
+
     def __get_priners_list_test(self):
         printers_list = []
         printers_list.append({'ip_address': '172.16.1.226', 'type': '1','login':'Admin','password':'Admin',
@@ -45,7 +46,7 @@ class Printers:
         # printers_list.append({'ip_address': '172.16.1.215', 'type': '1','login':'Admin','password':'Admin',
         #                       'id_device':'9','device_model':'KYOCERA_ECOSYS_M2040dn','printer_location':'Феликс'})
         # printers_list.append({'ip_address': '172.16.1.220', 'type': '1','login':'Admin','password':'Admin',
-        #                       'id_device':'10','device_model':'KYOCERA_FS_1035MFP'   ,'printer_location':'Стариков'})
+        #                       'id_device':'10','device_model':'KYOCERA_ECOSYS_FS_1035MFP'   ,'printer_location':'Стариков'})
         # printers_list.append({'ip_address': '172.16.1.250', 'type': '1','login':'Admin','password':'Admin',
         #                       'id_device':'11','device_model':'KYOCERA_ECOSYS_M2035dn','printer_location':'Журавлева'})
         # printers_list.append({'ip_address': '172.16.1.229', 'type': '1','login':'Admin','password':'Admin',
@@ -53,7 +54,7 @@ class Printers:
         # printers_list.append({'ip_address': '172.16.1.249', 'type': '1','login':'Admin','password':'Admin',
         #                        'id_device':'13','device_model':'KYOCERA_ECOSYS_M2635dn','printer_location':'Toyota кредитницы'})
         # printers_list.append({'ip_address': '172.16.1.234', 'type': '1','login':'Admin','password':'Admin',
-        #                       'id_device':'14','device_model':'KYOCERA_FS_2100DN'    ,'printer_location':'Jeely допники'})
+        #                       'id_device':'14','device_model':'KYOCERA_ECOSYS_FS_2100dn'    ,'printer_location':'Jeely допники'})
         # printers_list.append({'ip_address': '172.16.1.238', 'type': '1','login':'Admin','password':'Admin',
         #                       'id_device':'15','device_model':'KYOCERA_ECOSYS_M3145dn'    ,'printer_location':'Toyota Ахметдинов'})
         # printers_list.append({'ip_address': '172.16.1.240', 'type': '1','login':'Admin','password':'Admin',
@@ -71,7 +72,7 @@ class Printers:
         # printers_list.append({'ip_address': '172.16.1.227', 'type': '1','login':'Admin','password':'Admin',
         #                       'id_device':'22','device_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'Toyota Алина'})
         # printers_list.append({'ip_address': '172.16.1.242', 'type': '1','login':'Admin','password':'Admin',
-        #                       'id_device':'23','device_model':'KYOCERA_FS_1035MFP'   ,'printer_location':'Toyota Callcenter'})
+        #                       'id_device':'23','device_model':'KYOCERA_ECOSYS_FS_1035MFP'   ,'printer_location':'Toyota Callcenter'})
         # printers_list.append({'ip_address': '172.16.1.214', 'type': '1','login':'Admin','password':'Admin',
         #                       'id_device':'24','device_model':'KYOCERA_ECOSYS_M2735dn','printer_location':'Toyota Бухгалтерия ЕА'})
         # printers_list.append({'ip_address': '172.16.1.219', 'type': '1','login':'Admin','password':'Admin',
@@ -83,7 +84,7 @@ class Printers:
         # printers_list.append({'ip_address': '172.16.1.231', 'type': '1','login':'Admin','password':'Admin',
         #                       'id_device':'28','device_model':'KYOCERA_ECOSYS_P2040dn','printer_location':'Toyota Склад'})
         # printers_list.append({'ip_address': '172.16.1.232', 'type': '1','login':'Admin','password':'Admin',
-        #                       'id_device':'29','device_model':'KYOCERA_FS_1035MFP'   ,'printer_location':'Toyota IT отдел'})
+        #                       'id_device':'29','device_model':'KYOCERA_ECOSYS_FS_1035MFP'   ,'printer_location':'Toyota IT отдел'})
         # printers_list.append({'ip_address': '172.16.1.241', 'type': '1','login':'Admin','password':'Admin',
         #                       'id_device':'30','device_model':'KYOCERA_ECOSYS_FS_1370dn','printer_location':'Toyota IT отдел 1с'})
         # printers_list.append({'ip_address': '172.16.1.216', 'type': '1','login':'Admin','password':'Admin',
@@ -107,7 +108,6 @@ class Printers:
         return printers_list
 class Printer:
     def get_counters(self,printer_info):
-        #printer_counters = []
         ret = {}
         device_model = printer_info['device_model']
         if device_model == 'KYOCERA_ECOSYS_M2735dn':
@@ -122,10 +122,10 @@ class Printer:
             Printer.__get_counters_KYOCERA_ECOSYS_M2040dn(self,printer_info)
         if device_model == 'KYOCERA_ECOSYS_M2135dn':
             Printer.__get_counters_KYOCERA_ECOSYS_M2040dn(self,printer_info)
-        if device_model == 'KYOCERA_FS_1035MFP':
-            Printer.__get_counters_KYOCERA_FS_1035MFP(self,printer_info)
-        if device_model == 'KYOCERA_FS_2100DN':
-            Printer.__get_counters_KYOCERA_FS_2100DN(self,printer_info)
+        if device_model == 'KYOCERA_ECOSYS_FS_1035MFP':
+            Printer.__get_counters_KYOCERA_ECOSYS_FS_1035MFP(self,printer_info)
+        if device_model == 'KYOCERA_ECOSYS_FS_2100dn':
+            Printer.__get_counters_KYOCERA_ECOSYS_FS_2100dn(self,printer_info)
         if device_model == 'HP_COLOR_LJ_M254nw':
             Printer.__get_counters_HP_COLOR_LJ_M254nw(self,printer_info)
         if device_model == 'KYOCERA_ECOSYS_M2635dn':
@@ -330,7 +330,7 @@ class Printer:
 
         t_printer_counters = T_PRINTER_COUNTERS.table_printer_counters
         t_printer_counters.save_to_table_by_dict(self,printer_counters)
-    def __get_counters_KYOCERA_FS_1035MFP(self,printer_info):
+    def __get_counters_KYOCERA_ECOSYS_FS_1035MFP(self,printer_info):
         driver = Printer.__init_printer_type_2(self, printer_info)
         driver.find_element(By.XPATH,'//*[@id="parentcounters"]').click()
         driver.find_element(By.XPATH,'//*[@id="counters"]/div[1]/a').click()
@@ -368,7 +368,7 @@ class Printer:
         #
         # t_printer_counters = T_PRINTER_COUNTERS.table_printer_counters
         # t_printer_counters.save_to_table_by_dict(self,printer_counters)
-    def __get_counters_KYOCERA_FS_2100DN(self,printer_info):
+    def __get_counters_KYOCERA_ECOSYS_FS_2100dn(self,printer_info):
         driver = Printer.__init_printer_type_1(self, printer_info)
         Printer.__login_to_printer(self,driver,printer_info)
         driver.find_element(By.XPATH,'//*[@id="settingcolor"]/td[3]/a').click()

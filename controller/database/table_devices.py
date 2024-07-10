@@ -22,12 +22,26 @@ class table_devices:
             connection = table_devices.__init_table()
             if connection:
                 with connection.cursor() as cursor:
-                    sql_str = f'SELECT d.id,d.ip_address, a.login, a.password, m.name, v.name ' \
-                              f'FROM device as d, device_auth as a, device_model as m, device_vendor as v, ' \
+                    sql_str = f'SELECT ' \
+                              f'd.id,d.ip_address, ' \
+                              f'a.login, ' \
+                              f'a.password, ' \
+                              f'm.name, ' \
+                              f'v.name ' \
+                              f'FROM ' \
+                              f'device as d, ' \
+                              f'device_auth as a, ' \
+                              f'device_model as m, ' \
+                              f'device_vendor as v, ' \
                               f'device_type as t ' \
-                              f'WHERE d.id_device_auth = a.id and d.id_device_model = m.id and ' \
-                              f'm.id_device_vendor = v.id and m.id_device_type = t.id ' \
-                              f'and d.enable and t.id in {device_types}'\
+                              f'WHERE ' \
+                              f'd.id_device_auth = a.id and ' \
+                              f'd.id_device_model = m.id and ' \
+                              f'm.id_device_vendor = v.id and ' \
+                              f'm.id_device_type = t.id and ' \
+                              f'd.enable and ' \
+                              f't.id in {device_types} and ' \
+                              f'd.networked '\
                               f'order by d.id;'
                     try:
                         cursor.execute(sql_str)
