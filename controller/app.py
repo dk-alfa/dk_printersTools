@@ -1,6 +1,7 @@
 import argparse
 from   controller.device.printer import Printers
 from   controller.tools.report   import Report
+import controller.database.table_printer_counters as TPrinterCounters
 import dictionary.dic_error      as ERROR
 import dictionary.dic_varior     as VARIOR
 import dictionary.dic_message    as MESSAGE
@@ -43,4 +44,8 @@ class App:
             for item in arg_list:
                 if 'dates' in item:
                     report = Report
-                    report.make_report(self,item['dates'])
+                    # report_str = report.get_printers_counts_report_long(self, item['dates'])
+                    report_str = report.get_printers_counts_report_short(self, item['dates'])
+                    print(report_str)
+
+

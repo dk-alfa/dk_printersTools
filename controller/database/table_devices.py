@@ -1,7 +1,7 @@
 import dictionary.dic_varior as VARIOR
 import psycopg2
 
-class table_devices:
+class TableDevices:
     def __init_table():
         connection = None
         try:
@@ -19,7 +19,7 @@ class table_devices:
         ret = []
         query_list =  None
         try:
-            connection = table_devices.__init_table()
+            connection = TableDevices.__init_table()
             if connection:
                 with connection.cursor() as cursor:
                     sql_str = f'SELECT ' \
@@ -50,8 +50,8 @@ class table_devices:
                             ret.append({'ip_address': f'{record[1]}','login':f'{record[2]}','password':f'{record[3]}',
                                         'id_device': f'{record[0]}','device_model':f'{record[5]}_{record[4]}'})
                     except Exception as _ex :
-                        print(f"[ERROR] Ошибка в модуле [(table_devices.py) "
-                              f"table_devices.get_devices_list] не удалось выполнить запрос {sql_str} {_ex}")
+                        print(f"[ERROR] Ошибка в модуле [(tabledevices.py) "
+                              f"TableDevices.get_devices_list] не удалось выполнить запрос {sql_str} {_ex}")
         except Exception as _ex:
             print(f"[ERROR] Ошибка в модуле [(table_printer_counters.py) table_printer_counters.save_to_table()] {_ex}")
         return ret
