@@ -44,8 +44,8 @@ class App:
             for item in arg_list:
                 if 'dates' in item:
                     report = Report
-                    # report_str = report.get_printers_counts_report_long(self, item['dates'])
-                    report_str = report.get_printers_counts_report_short(self, item['dates'])
+                    report_str = report.get_printers_counts_report_long(self, item['dates'])
+                    #report_str = report.get_printers_counts_report_short(self, item['dates'])
                     print(report_str)
 
 
