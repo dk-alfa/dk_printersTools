@@ -1,6 +1,7 @@
 import argparse
 from   controller.device.printer import Printers
 from   controller.tools.report   import Report
+from   controller.tools.test     import Test
 import controller.database.table_printer_counters as TPrinterCounters
 import dictionary.dic_error      as ERROR
 import dictionary.dic_varior     as VARIOR
@@ -22,12 +23,15 @@ class App:
                             help=MESSAGE.ARG_PRINTERS_PAGES_COUNTER,action="store_true")
         parser.add_argument(VARIOR.ARG_PRINTERS_PAGES_REPORT_SHORT, VARIOR.ARG_PRINTERS_PAGES_REPORT_LONG,
                             help=MESSAGE.ARG_PRINTERS_PAGES_REPORT, nargs=2, metavar=('start_date','end_date'), action='append' )
+        parser.add_argument(VARIOR.ARG_PRINTERS_PAGES_TEST_SHORT, VARIOR.ARG_PRINTERS_PAGES_TEST_LONG,
+                            help=MESSAGE.ARG_PRINTERS_PAGES_TEST, nargs='?', metavar=('date_test'), const='now',action="append")
 
         app_args = parser.parse_args()
 
         if app_args.version     : arg_list.append({"arg_name": f"{VARIOR.ARG_VERSION_LONG}"})
         if app_args.saveprncntrs: arg_list.append({"arg_name": f"{VARIOR.ARG_PRINTERS_PAGES_COUNTER_LONG}"})
-        if app_args.report      : arg_list.append({"arg_name": f"{VARIOR.ARG_PRINTERS_PAGES_REPORT_LONG}","dates":app_args.report[0]})
+        if app_args.repprncntrs : arg_list.append({"arg_name": f"{VARIOR.ARG_PRINTERS_PAGES_REPORT_LONG}","dates":app_args.repprncntrs[0]})
+        if app_args.testprncntrs: arg_list.append({"arg_name": f"{VARIOR.ARG_PRINTERS_PAGES_TEST_LONG}","date":app_args.testprncntrs[0]})
 
         return  arg_list
     def __execute_app(self,arg_list):
@@ -44,8 +48,15 @@ class App:
             for item in arg_list:
                 if 'dates' in item:
                     report = Report
-                    report_str = report.get_printers_counts_report_long(self, item['dates'])
-                    #report_str = report.get_printers_counts_report_short(self, item['dates'])
+                    # report_str = report.get_printers_counts_report_long(self, item['dates'])
+                    report_str = report.get_printers_counts_report_short(self, item['dates'])
                     print(report_str)
+        if VARIOR.ARG_PRINTERS_PAGES_TEST_LONG in the_arg_list:
+            for item in arg_list:
+                if 'date' in item:
+                    test = Test
+                    test.test_table_printer_counters(self,item['date'])
+
+
 
 

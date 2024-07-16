@@ -22,7 +22,7 @@ class Report:
             sum6 = 0
 
 
-            print(report_query[0])
+            # print(report_query[0])
             for item in report_query:
                 name = f'{item[18]}_{item[17]}'
                 sum1 = sum1+ int(item[4] - item[3])
