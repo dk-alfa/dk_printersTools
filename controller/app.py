@@ -41,18 +41,19 @@ class App:
             the_arg_list.append(item["arg_name"])
 
         if VARIOR.ARG_VERSION_LONG in the_arg_list:  print(MESSAGE.APP_VERSION)
-        if VARIOR.ARG_PRINTERS_PAGES_COUNTER_LONG in the_arg_list:
-            priners = Printers
-            priners.get_counters(self)
-        if VARIOR.ARG_PRINTERS_PAGES_REPORT_LONG in the_arg_list:
-            for item in arg_list:
-                if 'dates' in item:
-                    report = Report
-                    # report_str = report.get_printers_counts_report_long(self, item['dates'])
-                    report_str = report.get_printers_counts_report_short(self, item['dates'])
-                    print(report_str)
-        if VARIOR.ARG_PRINTERS_PAGES_TEST_LONG in the_arg_list: self.__run_test(self,arg_list)
-
+        if VARIOR.ARG_PRINTERS_PAGES_COUNTER_LONG in the_arg_list: self.__run_get_counters(self)
+        if VARIOR.ARG_PRINTERS_PAGES_REPORT_LONG  in the_arg_list: self.__run_report(self,arg_list)
+        if VARIOR.ARG_PRINTERS_PAGES_TEST_LONG    in the_arg_list: self.__run_test(self,arg_list)
+    def __run_get_counters(self):
+        priners = Printers
+        priners.get_counters(self)
+    def __run_report(self,arg_list):
+        for item in arg_list:
+            if 'dates' in item:
+                report = Report
+                # report_str = report.get_printers_counts_report_long(self, item['dates'])
+                report_str = report.get_printers_counts_report_short(self, item['dates'])
+                print(report_str)
     def __run_test(self,arg_list):
         for item in arg_list:
             if 'date' in item:
