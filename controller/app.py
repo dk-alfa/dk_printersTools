@@ -51,11 +51,14 @@ class App:
                     # report_str = report.get_printers_counts_report_long(self, item['dates'])
                     report_str = report.get_printers_counts_report_short(self, item['dates'])
                     print(report_str)
-        if VARIOR.ARG_PRINTERS_PAGES_TEST_LONG in the_arg_list:
-            for item in arg_list:
-                if 'date' in item:
-                    test = Test
-                    test.test_table_printer_counters(self,item['date'])
+        if VARIOR.ARG_PRINTERS_PAGES_TEST_LONG in the_arg_list: self.__run_test(self,arg_list)
+
+    def __run_test(self,arg_list):
+        for item in arg_list:
+            if 'date' in item:
+                test = Test
+                test_result = test.test_table_printer_counters(self, item['date'])
+                print(test_result)
 
 
 

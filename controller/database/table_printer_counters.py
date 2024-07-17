@@ -1,3 +1,5 @@
+import datetime
+
 import dictionary.dic_varior as VARIOR
 import psycopg2
 
@@ -81,11 +83,11 @@ class TablePrinterCounters:
                                     f"max(c.name) " \
                                   f"FROM " \
                                     f"printer_counters p " \
-                                    f"JOIN device d ON p.id_device = d.id " \
-                                    f"JOIN device_model m ON d.id_device_model = m.id " \
-                                    f"JOIN device_vendor v ON m.id_device_vendor = v.id " \
-                                    f"JOIN printer_cartridge_property c ON m.id_over = c.id " \
-                                    f"WHERE p.date_created BETWEEN to_timestamp('{date[0]} 00:00','YYYY-MM-DD HH24:MI') " \
+                                  f"JOIN device d ON p.id_device = d.id " \
+                                  f"JOIN device_model m ON d.id_device_model = m.id " \
+                                  f"JOIN device_vendor v ON m.id_device_vendor = v.id " \
+                                  f"JOIN printer_cartridge_property c ON m.id_over = c.id " \
+                                  f"WHERE p.date_created BETWEEN to_timestamp('{date[0]} 00:00','YYYY-MM-DD HH24:MI') " \
                                     f" and to_timestamp('{date[1]} 23:59','YYYY-MM-DD HH24:MI') " \
                                   f"GROUP BY p.id_device " \
                                   f"ORDER BY p.id_device;"
@@ -100,9 +102,46 @@ class TablePrinterCounters:
                             #       f" {item[3]}, {item[4]}, print dif:{item[4] - item[3]}, {item[5]}, {item[6]}, {item[8]}_{item[7]} {item[11]}")
                     except Exception as _ex:
                         print(f"[ERROR] Ошибка в модуле [(table_printer_counters.py) "
-                              f"table_printer_counters.save_to_table_by_dict()] не удалось выполнить запрос {sql_str} {_ex}")
+                              f"table_printer_counters.get_reports_by_two_dates(self,dates)] не удалось выполнить запрос {sql_str} {_ex}")
         except Exception as _ex:
             print(f"[ERROR] Ошибка в модуле [(table_printer_counters.py) "
                   f"table_printer_counters.get_reports_by_two_dates(self,dates)] {_ex}")
+        return ret
+    def get_id_devices_by_date(self,date):
+        ret = []
+        if date == 'now':
+            date = datetime.datetime.now()
+        else: date = datetime.datetime.strptime(date, "%Y-%m-%d")
+        date_from = date.strftime("%Y-%m-%d 00:00")
+        date_to  =  date.strftime("%Y-%m-%d 23:59")
+        try:
+            connection = TablePrinterCounters.__init_table()
+            if connection:
+                with connection.cursor() as cursor:
+                    try:
+                        sql_str = f"" \
+                                  f"SELECT " \
+                                    f"p.id_device " \
+                                  f"FROM " \
+                                    f"printer_counters p " \
+                                  f"WHERE " \
+                                    f"p.date_created BETWEEN to_timestamp('{date_from}','YYYY-MM-DD HH24:MI') " \
+                                    f"and to_timestamp('{date_to}','YYYY-MM-DD HH24:MI')  " \
+                                  f"GROUP BY p.id_device " \
+                                  f"ORDER BY p.id_device;"
+                        # print(sql_str)
+                        cursor.execute(sql_str)
+                        query_list = cursor.fetchall()
+                        for record in query_list:
+                            ret.append(record[0])
+
+
+                        # if response: ret = response
+                    except Exception as _ex:
+                        print(f"[ERROR] Ошибка в модуле [(table_printer_counters.py) "
+                              f"table_printer_counters.get_id_devices_by_date(self,date)] не удалось выполнить запрос {sql_str} {_ex}")
+        except Exception as _ex:
+            print(f"[ERROR] Ошибка в модуле [(table_printer_counters.py) "
+                  f"table_printer_counters.get_id_devices_by_date(self,date)] {_ex}")
         return ret
 
