@@ -35,7 +35,6 @@ class App:
 
         return  arg_list
     def __execute_app(self,arg_list):
-        # print(arg_list)
         the_arg_list = []
         for item in arg_list:
             the_arg_list.append(item["arg_name"])
@@ -59,7 +58,21 @@ class App:
             if 'date' in item:
                 test = Test
                 test_result = test.test_table_printer_counters(self, item['date'])
-                print(test_result)
+                test_str = ''
+                if test_result == None:
+                    test_str = f'{MESSAGE.INFO_PRINTERS_COUNTERS_LIST_IS_EMPTY} за {item["date"]}'
+                else:
+                    if test_result:
+                         if len(test_result):
+                             test_str_header = f'{MESSAGE.INFO_PRINTERS_COUNTERS_NOT_FOUND}\n'
+                             test_str_body= ''
+                             c = 0
+                             for item in test_result:
+                                 c += 1
+                                 test_str_body += f'{c}: [{item["id_device"]}] {item["ip_address"]} {item["device_model"]} {item["device_name"]} \n'
+                                 test_str = test_str_header + test_str_body
+                    else: test_str = f'{MESSAGE.INFO_PRINTERS_COUNTERS_ALL_FOUND}'
+                print(test_str)
 
 
 

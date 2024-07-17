@@ -5,3 +5,6 @@ ARG_PRINTERS_PAGES_COUNTER = 'Сохранить счетчики принтер
 ARG_PRINTERS_PAGES_REPORT = f'Создать отчет пример: python {sys.argv[0]} -rpc 2024-07-09 2024-07-10'
 ARG_PRINTERS_PAGES_TEST = f'Тест таблицы "счетчики принтеров"  пример: python {sys.argv[0]} -tpc 2024-07-09 , если аргумента нет, то выбирается текщая дата'
 INFO_PRINTERS_LIST_IS_EMPTY = '[INFO] Список принтеров пуст'
+INFO_PRINTERS_COUNTERS_LIST_IS_EMPTY = 'Не найдено ни одной записи о счетчиках принтеров'
+INFO_PRINTERS_COUNTERS_NOT_FOUND =     'Не найдены записи о счетчиках следующих принтеров:'
+INFO_PRINTERS_COUNTERS_ALL_FOUND =     'Найдены записи обо всех счетчиках принтеров'
