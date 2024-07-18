@@ -2,7 +2,8 @@ import argparse
 from   controller.device.printer import Printers
 from   controller.tools.report   import Report
 from   controller.tools.test     import Test
-import controller.database.table_printer_counters as TPrinterCounters
+from   controller.tools.log      import Log
+
 import dictionary.dic_error      as ERROR
 import dictionary.dic_varior     as VARIOR
 import dictionary.dic_message    as MESSAGE
@@ -54,25 +55,31 @@ class App:
                 report_str = report.get_printers_counts_report_short(self, item['dates'])
                 print(report_str)
     def __run_test(self,arg_list):
+        log_level = VARIOR.LOG_LEVEL_ERROR
+        log_message = 'Не удалось запустить тест : ошибка App.__run_test(self,arg_list)'
         for item in arg_list:
             if 'date' in item:
                 test = Test
-                test_result = test.test_table_printer_counters(self, item['date'])
-                test_str = ''
-                if test_result == None:
-                    test_str = f'{MESSAGE.INFO_PRINTERS_COUNTERS_LIST_IS_EMPTY} за {item["date"]}'
+                log_result = test.test_table_printer_counters(self, item['date'])
+                log_message = ''
+                if log_result == None:
+                    log_message = f'{MESSAGE.INFO_PRINTERS_COUNTERS_LIST_IS_EMPTY} за {item["date"]}'
                 else:
-                    if test_result:
-                         if len(test_result):
-                             test_str_header = f'{MESSAGE.INFO_PRINTERS_COUNTERS_NOT_FOUND}\n'
-                             test_str_body= ''
+                    if log_result:
+                         if len(log_result):
+                             log_message_header = f'{MESSAGE.INFO_PRINTERS_COUNTERS_NOT_FOUND}\n'
+                             log_message_body= ''
                              c = 0
-                             for item in test_result:
+                             for item in log_result:
                                  c += 1
-                                 test_str_body += f'{c}: [{item["id_device"]}] {item["ip_address"]} {item["device_model"]} {item["device_name"]} \n'
-                                 test_str = test_str_header + test_str_body
-                    else: test_str = f'{MESSAGE.INFO_PRINTERS_COUNTERS_ALL_FOUND}'
-                print(test_str)
+                                 log_message_body += f'{c}: [{item["id_device"]}] {item["ip_address"]} {item["device_model"]} {item["device_name"]}\n'
+                             log_message = log_message_header + log_message_body
+                    else:
+                        log_level = VARIOR.LOG_LEVEL_INFO
+                        log_message = f'{MESSAGE.INFO_PRINTERS_COUNTERS_ALL_FOUND}'
+        print(log_message)
+        log = Log
+        log.create_log(self,log_level,log_message,VARIOR.LOG_TO_EMAIL)
 
 
 

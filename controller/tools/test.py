@@ -32,6 +32,5 @@ class Test:
                             'device_model': f'{item["device_model"]}',
                             'device_name' : f'{item["device_name"]}',
                                     })
-
         else: ret = None
         return ret

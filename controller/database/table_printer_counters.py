@@ -1,5 +1,4 @@
 import datetime
-
 import dictionary.dic_varior as VARIOR
 import psycopg2
 
