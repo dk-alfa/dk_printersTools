@@ -1,4 +1,5 @@
 import argparse
+import datetime
 from   controller.device.printer import Printers
 from   controller.tools.report   import Report
 from   controller.tools.test     import Test
@@ -7,6 +8,7 @@ from   controller.tools.log      import Log
 import dictionary.dic_error      as ERROR
 import dictionary.dic_varior     as VARIOR
 import dictionary.dic_message    as MESSAGE
+import controller.tools.over     as over
 
 class App:
     def run(self, args):
@@ -26,6 +28,8 @@ class App:
                             help=MESSAGE.ARG_PRINTERS_PAGES_REPORT, nargs=2, metavar=('start_date','end_date'), action='append' )
         parser.add_argument(VARIOR.ARG_PRINTERS_PAGES_TEST_SHORT, VARIOR.ARG_PRINTERS_PAGES_TEST_LONG,
                             help=MESSAGE.ARG_PRINTERS_PAGES_TEST, nargs='?', metavar=('date_test'), const='now',action="append")
+        parser.add_argument(VARIOR.ARG_SEND_EMAIL_SHORT, VARIOR.ARG_SEND_EMAIL_LONG,
+                            help=MESSAGE.ARG_SENND_EMAIL, nargs='?', metavar=('date_se'), const='now',action="append")
 
         app_args = parser.parse_args()
 
@@ -33,6 +37,8 @@ class App:
         if app_args.saveprncntrs: arg_list.append({"arg_name": f"{VARIOR.ARG_PRINTERS_PAGES_COUNTER_LONG}"})
         if app_args.repprncntrs : arg_list.append({"arg_name": f"{VARIOR.ARG_PRINTERS_PAGES_REPORT_LONG}","dates":app_args.repprncntrs[0]})
         if app_args.testprncntrs: arg_list.append({"arg_name": f"{VARIOR.ARG_PRINTERS_PAGES_TEST_LONG}","date":app_args.testprncntrs[0]})
+        # Этот пункт всегда должен быть внизу
+        if app_args.sendemail   : arg_list.append({"arg_name": f"{VARIOR.ARG_SEND_EMAIL_LONG}", "date": app_args.sendemail[0]})
 
         return  arg_list
     def __execute_app(self,arg_list):
@@ -49,16 +55,17 @@ class App:
         priners.get_counters(self)
     def __run_report(self,arg_list):
         for item in arg_list:
-            if 'dates' in item:
+            if 'dates' in item and over.dk_is_date(item['dates'][0]) and over.dk_is_date(item['dates'][1]):
                 report = Report
-                # report_str = report.get_printers_counts_report_long(self, item['dates'])
+                report_str = report.get_printers_counts_report_long(self, item['dates'])
+
                 report_str = report.get_printers_counts_report_short(self, item['dates'])
                 print(report_str)
     def __run_test(self,arg_list):
         log_level = VARIOR.LOG_LEVEL_ERROR
         log_message = 'Не удалось запустить тест : ошибка App.__run_test(self,arg_list)'
         for item in arg_list:
-            if 'date' in item:
+            if 'date' in item and over.dk_is_date(item['date']):
                 test = Test
                 log_result = test.test_table_printer_counters(self, item['date'])
                 log_message = ''
@@ -77,9 +84,9 @@ class App:
                     else:
                         log_level = VARIOR.LOG_LEVEL_INFO
                         log_message = f'{MESSAGE.INFO_PRINTERS_COUNTERS_ALL_FOUND}'
-        print(log_message)
-        log = Log
-        log.create_log(self,log_level,log_message,VARIOR.LOG_TO_EMAIL)
+                print(log_message)
+                log = Log
+                log.create_log(self,log_level,log_message,VARIOR.LOG_TO_EMAIL)
 
 
 
