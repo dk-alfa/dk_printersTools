@@ -23,7 +23,8 @@ class Test:
             if list_div:
                 list_div.sort()
                 tuple_div = tuple(list_div)
-                device_list = t_devices.get_devices_list_by_devices_id(self,tuple_div)
+                the_div  = str(list_div).replace('[','(').replace(']',')')
+                device_list = t_devices.get_devices_list_by_devices_id(self,the_div)
                 if device_list:
                     for item in device_list:
                         ret.append({
