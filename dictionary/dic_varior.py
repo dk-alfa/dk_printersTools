@@ -1,3 +1,5 @@
+import datetime
+
 ARG_VERSION_LONG = '--version'
 ARG_VERSION_SHORT = '-v'
 ARG_PRINTERS_PAGES_COUNTER_LONG = '--saveprncntrs'
@@ -15,6 +17,13 @@ DB_NAME = 'it-tools_dev'
 DB_USER = 'pgroot'
 DB_PASS = 'nhbvbnbk'
 DB_HOST = '192.168.22.45'
+
+MAIL_LOGIN     = 'alerts@toyota-ufa.ru'
+MAIL_PASSWORD  = 'CjkywtDc[jlbnYfDjcnjrt'
+MAIL_SMTP_HOST = 'mx.alfateam.info'
+MAIL_SUBJECT   = f'Ежедневный отчет о том, что произошло {datetime.datetime.now().date()}'
+MAIL_PORT      = 587
+MAIL_TO        = 'dkorablev@toyota-ufa.ru'
 
 DEVICE_TYPE_PRINTER = 1
 DEVICE_TYPE_MFU     = 2

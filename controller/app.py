@@ -4,6 +4,7 @@ from   controller.device.printer import Printers
 from   controller.tools.report   import Report
 from   controller.tools.test     import Test
 from   controller.tools.log      import Log
+from   controller.tools.email    import Email
 
 import dictionary.dic_error      as ERROR
 import dictionary.dic_varior     as VARIOR
@@ -37,7 +38,6 @@ class App:
         if app_args.saveprncntrs: arg_list.append({"arg_name": f"{VARIOR.ARG_PRINTERS_PAGES_COUNTER_LONG}"})
         if app_args.repprncntrs : arg_list.append({"arg_name": f"{VARIOR.ARG_PRINTERS_PAGES_REPORT_LONG}","dates":app_args.repprncntrs[0]})
         if app_args.testprncntrs: arg_list.append({"arg_name": f"{VARIOR.ARG_PRINTERS_PAGES_TEST_LONG}","date":app_args.testprncntrs[0]})
-        # Этот пункт всегда должен быть внизу
         if app_args.sendemail   : arg_list.append({"arg_name": f"{VARIOR.ARG_SEND_EMAIL_LONG}", "date": app_args.sendemail[0]})
 
         return  arg_list
@@ -50,6 +50,8 @@ class App:
         if VARIOR.ARG_PRINTERS_PAGES_COUNTER_LONG in the_arg_list: self.__run_get_counters(self)
         if VARIOR.ARG_PRINTERS_PAGES_REPORT_LONG  in the_arg_list: self.__run_report(self,arg_list)
         if VARIOR.ARG_PRINTERS_PAGES_TEST_LONG    in the_arg_list: self.__run_test(self,arg_list)
+        # Этот пункт всегда должен быть внизу
+        if VARIOR.ARG_SEND_EMAIL_LONG             in the_arg_list: self.__run_send_email(self, arg_list)
     def __run_get_counters(self):
         priners = Printers
         priners.get_counters(self)
@@ -87,6 +89,11 @@ class App:
                 print(log_message)
                 log = Log
                 log.create_log(self,log_level,log_message,VARIOR.LOG_TO_EMAIL)
+    def __run_send_email(self,arg_list):
+        for item in arg_list:
+            if 'date' in item and over.dk_is_date(item['date']):
+                email = Email()
+                email.send_by_date(item['date'])
 
 
 

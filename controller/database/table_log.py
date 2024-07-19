@@ -1,5 +1,6 @@
 import dictionary.dic_varior as VARIOR
 import psycopg2
+import datetime
 
 class TableLog:
     __connection = None
@@ -37,4 +38,38 @@ class TableLog:
             except Exception as _ex:
                 print(f"[ERROR] Ошибка в модуле [((table_log.py) table_log.create_log_by_dict()] {_ex}")
         else: print(f"[ERROR] Ошибка в модуле [((table_log.py) table_log.create_log_by_dict()] Нет соединения с таблицей log")
+    def read_log_by_date(self,date):
+        ret = []
+        date_from = f'{date} 00:00'
+        date_to   = f'{date} 23:59'
+        sql_str = f"SELECT " \
+                  f"l.message, " \
+                  f"s.name log_subject, " \
+                  f"ll.name log_level " \
+                  f"FROM " \
+                    f"log l " \
+                  f"JOIN log_subject s ON l.id_log_subject = s.id " \
+                  f"JOIN log_level ll ON l.id_log_level = ll.id " \
+                  f"WHERE " \
+                    f"l.to_email and " \
+                    f"l.date_created " \
+                    f"BETWEEN " \
+                    f"to_timestamp('{date_from}','YYYY-MM-DD HH24:MI') and " \
+                    f"to_timestamp('{date_to}','YYYY-MM-DD HH24:MI')" \
+                    f";"
+        if self.__connection:
+            try:
+                with self.__connection.cursor() as cursor:
+                    try:
+                        cursor.execute(sql_str)
+                        query_list = cursor.fetchall()
+                        for record in query_list:
+                            ret.append({'message': f'{record[0]}','log_subject':f'{record[1]}','lavel':f'{record[2]}'})
+                    except Exception as _ex:
+                        print(f"[ERROR] Ошибка в модуле [(table_log.py) "
+                              f"table_log.create_log_by_dict()] не удалось выполнить запрос {sql_str} {_ex}")
+            except Exception as _ex:
+                print(f"[ERROR] Ошибка в модуле [((table_log.py) table_log.read_log_by_date] {_ex}")
+        else: print(f"[ERROR] Ошибка в модуле [((table_log.py) table_log.read_log_by_date] Нет соединения с таблицей log")
+        return ret
 
