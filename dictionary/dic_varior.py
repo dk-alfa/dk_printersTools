@@ -21,7 +21,7 @@ DB_HOST = '192.168.22.45'
 MAIL_LOGIN     = 'alerts@toyota-ufa.ru'
 MAIL_PASSWORD  = 'CjkywtDc[jlbnYfDjcnjrt'
 MAIL_SMTP_HOST = 'mx.alfateam.info'
-MAIL_SUBJECT   = f'Ежедневный отчет о том, что произошло {datetime.datetime.now().date()}'
+MAIL_SUBJECT   = f'Report by {datetime.datetime.now().date()}'
 MAIL_PORT      = 587
 MAIL_TO        = 'dkorablev@toyota-ufa.ru'
 

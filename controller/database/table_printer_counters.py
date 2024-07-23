@@ -133,9 +133,6 @@ class TablePrinterCounters:
                         query_list = cursor.fetchall()
                         for record in query_list:
                             ret.append(record[0])
-
-
-                        # if response: ret = response
                     except Exception as _ex:
                         print(f"[ERROR] Ошибка в модуле [(table_printer_counters.py) "
                               f"table_printer_counters.get_id_devices_by_date(self,date)] не удалось выполнить запрос {sql_str} {_ex}")
