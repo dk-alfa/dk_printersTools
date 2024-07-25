@@ -1,3 +1,8 @@
+"""Класс App
+Написана Дмитрием Кораблевым инженером отдела IT ООО Альфа-Сервис
+Дата первого коммита 2024-07-26
+"""
+
 import argparse
 import datetime
 import time
@@ -8,13 +13,15 @@ from   controller.tools.report   import Report
 from   controller.tools.test     import Test
 from   controller.tools.log      import Log
 from   controller.tools.email    import Email
-
 import dictionary.dic_error      as ERROR
 import dictionary.dic_varior     as VARIOR
 import dictionary.dic_message    as MESSAGE
 import controller.tools.over     as over
 
 class App:
+    """
+    Класс приложение
+    """
     def run(self, args):
         if len(args) == 1:
             print(ERROR.APP_ARG_COUNT)
@@ -127,7 +134,6 @@ class App:
         log = Log
         log.create_log(self,log_level,log_message,VARIOR.LOG_TO_EMAIL)
     def __run_send_email(self,arg_list):
-        # print('__run_send_email')
         for item in arg_list:
             if 'date_se' in item and over.dk_is_date(item['date_se']):
                 email = Email()

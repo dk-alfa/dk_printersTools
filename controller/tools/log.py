@@ -8,4 +8,5 @@ class Log :
     def read_log_by_date(self,date):
         table_log = TableLog()
         log_by_date = table_log.read_log_by_date(date)
+        # print(log_by_date)
         return log_by_date

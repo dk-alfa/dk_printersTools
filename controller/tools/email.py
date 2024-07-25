@@ -22,12 +22,10 @@ class Email:
             send_str = f'<h2 style="color: SteelBlue;margin-bottom:0px"> Отчет о событиях за {date} </h2>' \
                        f'<hr style="color: CadetBlue;">\n'
             for item in log_for_send:
-                if ': [' in str(item['message']) \
-                        :
+                if ': [' in str(item['message']) :
                     tmp_str = str(item['message']).replace('\n','\n\t')
                     item['message'] = tmp_str
-                    send_str += f"\tСообщение от {item['log_subject']} [{item['lavel']}] {item['message'] }\n"
-        # print(send_str)
+                send_str += f"\t({item['date_created']}) {item['log_subject']} [{item['lavel']}] {item['message'] }\n"
         self.__send_email(send_str)
     def __send_email(self,message):
         # msg = MIMEText(message,'plain','utf-8')

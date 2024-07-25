@@ -45,7 +45,8 @@ class TableLog:
         sql_str = f"SELECT " \
                   f"l.message, " \
                   f"s.name log_subject, " \
-                  f"ll.name log_level " \
+                  f"ll.name log_level, " \
+                  f"l.date_created " \
                   f"FROM " \
                     f"log l " \
                   f"JOIN log_subject s ON l.id_log_subject = s.id " \
@@ -55,8 +56,9 @@ class TableLog:
                     f"l.date_created " \
                     f"BETWEEN " \
                     f"to_timestamp('{date_from}','YYYY-MM-DD HH24:MI') and " \
-                    f"to_timestamp('{date_to}','YYYY-MM-DD HH24:MI')" \
-                    f";"
+                    f"to_timestamp('{date_to}','YYYY-MM-DD HH24:MI') " \
+                    f"ORDER BY l.date_created" \
+                  f";"
         if self.__connection:
             try:
                 with self.__connection.cursor() as cursor:
@@ -64,7 +66,8 @@ class TableLog:
                         cursor.execute(sql_str)
                         query_list = cursor.fetchall()
                         for record in query_list:
-                            ret.append({'message': f'{record[0]}','log_subject':f'{record[1]}','lavel':f'{record[2]}'})
+                            ret.append({'message': f'{record[0]}','log_subject':f'{record[1]}','lavel':f'{record[2]}',
+                                        'date_created':f'{str(record[3])[:-10]}'})
                     except Exception as _ex:
                         print(f"[ERROR] Ошибка в модуле [(table_log.py) "
                               f"table_log.create_log_by_dict()] не удалось выполнить запрос {sql_str} {_ex}")

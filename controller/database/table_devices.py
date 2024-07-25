@@ -132,10 +132,10 @@ class TableDevices:
             print(f"[ERROR] Ошибка в модуле [(table_devices.py) TableDevices.get_devices_list()] {_ex}")
         return ret
     def get_device_by_dic(self,dict):
+        ret = []
         in_str = ''
         for item in dict:
             in_str += f' d.{item} = {dict.get(item)} and '
-        ret = []
         query_list = None
         try:
             connection = TableDevices.__init_table()
