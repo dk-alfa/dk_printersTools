@@ -1,6 +1,18 @@
 """Класс App
-Написана Дмитрием Кораблевым инженером отдела IT ООО Альфа-Сервис
+Написано Дмитрием Кораблевым инженером отдела IT ООО Альфа-Сервис
 Дата первого коммита 2024-07-26
+
+App содержит следующие методы:
+    run(self, args)              запуск приложения
+    __parse_arguments(self,args) парсинг аргументов
+    __execute_app(self,arg_list) выполнение приложения
+              метод                     описание                            ключ запуска
+    --------------------------------------------------------------------------------------------------
+
+    __run_get_counters           опрос и сохранение счетчиков принтеров -spc (Save Printers Counters)
+    __run_report                 сделать отчет                          -rpc (Report Printers Counters)
+    __run_test                   запустить тест                         -tpc (Test Printers Counters)
+    __run_send_email             отправить логи на e-mail               -se  (Send E-mail)
 """
 
 import argparse
@@ -23,24 +35,49 @@ class App:
     Класс приложение
     """
     def run(self, args):
+        """
+        Метод: запуск приложения
+        Проверка на наличие аргументов, парсинг аргументов, выпонение приложения
+        :param args : аргументы командной строки
+        :return     : Ничего
+        """
         if len(args) == 1:
             print(ERROR.APP_ARG_COUNT)
-        else: self.__run_app(self,args)
-    def __run_app(self,args):
-        arg_list = self.__parse_arguments(self,args)
-        if arg_list: self.__execute_app(self,arg_list)
+        else:
+            arg_list = self.__parse_arguments(self, args)
+            if arg_list: self.__execute_app(self, arg_list)
     def __parse_arguments(self,args):
+        """
+        Метод: парсинг аргументов
+        Создание списка аргументов командной строки для дальнейшей работы с этим списком
+        возможные значения:
+            -h      help по аргументам
+            -v      показать версию приложения
+            -spc [options] (Save Printers Counters) сохранить счетчики принтеров
+                options:
+                    все действия производятся за текщую дату дата в формате 2024-07-26
+                    [отсутствуют]: производится сохранение всех счетчиков в таблицу printers_counters
+                    [id=] сохранение счетчиков принтера по его id в таблице devices
+                    [ip=] сохранение счетчиков принтера по его ip
+            -rpc [options] (Report Printers Counters) очеты о счетчиках принтеров
+                options:
+                    [date start date end] начальная и конечная дата за которые нужно создать отчет
+            -tpc [options] (Test Printers Counters) тест таблицы printers_counters на наличие записей обо всех
+                           принтерах/МФУ присутствующих в таблице devices
+                    [отсутствуют]: тест за текущую дату
+                    [date_tpc]  : тест за date test
+            -se  [options] (Send E-mail) передать данные из таблицы log за такю то дату на e-mail
+                  options:
+                    [отсутствуют]: передаются логи за текущую дату
+                    [date_se]    : передаются логи за date_se
+        :param args : args аргументы командной строки
+        :return     : arg_list - список аргументов
+        """
         arg_list = []
         parser = argparse.ArgumentParser()
         parser.add_argument(VARIOR.ARG_VERSION_SHORT, VARIOR.ARG_VERSION_LONG, help=MESSAGE.ARG_VERSION_HELP, action="store_true")
-
-
-
         parser.add_argument(VARIOR.ARG_PRINTERS_PAGES_COUNTER_SHORT, VARIOR.ARG_PRINTERS_PAGES_COUNTER_LONG,
                             help=MESSAGE.ARG_PRINTERS_PAGES_COUNTER,nargs='?',metavar=('options'),action="append")
-
-
-
         parser.add_argument(VARIOR.ARG_PRINTERS_PAGES_REPORT_SHORT, VARIOR.ARG_PRINTERS_PAGES_REPORT_LONG,
                             help=MESSAGE.ARG_PRINTERS_PAGES_REPORT, nargs=2, metavar=('start_date','end_date'), action='append' )
         parser.add_argument(VARIOR.ARG_PRINTERS_PAGES_TEST_SHORT, VARIOR.ARG_PRINTERS_PAGES_TEST_LONG,
@@ -90,15 +127,6 @@ class App:
             if option_is_good:
                 priners = Printers
                 priners.get_counters(self,the_option)
-
-        # print(arg_list[0])
-
-        # for item in arg_list:
-        #     print(item)
-        # print(arg_list[0])
-        # print(arg_list)
-        # priners = Printers
-        # priners.get_counters(self)
     def __run_report(self,arg_list):
         for item in arg_list:
             if 'dates' in item and over.dk_is_date(item['dates'][0]) and over.dk_is_date(item['dates'][1]):
