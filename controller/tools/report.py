@@ -3,11 +3,12 @@ import datetime
 
 class Report:
     def get_printers_counts_report_short(self, dates):
+        # print(dates[0],dates[1])
         ret = None
         try:
             t_printer_counters = T_PRINTER_COUNTERS.TablePrinterCounters
+            report_query = t_printer_counters.get_report_by_two_dates(self, dates)
             delimiter = '---------------------------------------------------------------------------------------------------------------------------------\n'
-            report_query = t_printer_counters.get_report_by_two_dates(self,dates)
             ret_str_header = f'Отчет о счетчиках принтеров за период с {dates[0]} по {dates[1]} ' \
                              f'дата генерации отчета {str(datetime.datetime.now())[:-10]}\n' \
                              f'{delimiter}' \
@@ -20,9 +21,6 @@ class Report:
             sum4 = 0
             sum5 = 0
             sum6 = 0
-
-
-            # print(report_query[0])
             for item in report_query:
                 name = f'{item[18]}_{item[17]}'
                 sum1 = sum1+ int(item[4] - item[3])

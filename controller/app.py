@@ -78,8 +78,12 @@ class App:
         parser.add_argument(VARIOR.ARG_VERSION_SHORT, VARIOR.ARG_VERSION_LONG, help=MESSAGE.ARG_VERSION_HELP, action="store_true")
         parser.add_argument(VARIOR.ARG_PRINTERS_PAGES_COUNTER_SHORT, VARIOR.ARG_PRINTERS_PAGES_COUNTER_LONG,
                             help=MESSAGE.ARG_PRINTERS_PAGES_COUNTER,nargs='?',metavar=('options'),action="append")
+
         parser.add_argument(VARIOR.ARG_PRINTERS_PAGES_REPORT_SHORT, VARIOR.ARG_PRINTERS_PAGES_REPORT_LONG,
-                            help=MESSAGE.ARG_PRINTERS_PAGES_REPORT, nargs=2, metavar=('start_date','end_date'), action='append' )
+                            help=MESSAGE.ARG_PRINTERS_PAGES_REPORT, nargs='*', metavar=('{short, long} start_date end_date'), action='append' )
+
+        # parser.add_argument(VARIOR.ARG_PRINTERS_PAGES_REPORT_SHORT, VARIOR.ARG_PRINTERS_PAGES_REPORT_LONG,
+        #                     help=MESSAGE.ARG_PRINTERS_PAGES_REPORT, nargs=2, metavar=('start_date','end_date'), action='append' )
         parser.add_argument(VARIOR.ARG_PRINTERS_PAGES_TEST_SHORT, VARIOR.ARG_PRINTERS_PAGES_TEST_LONG,
                             help=MESSAGE.ARG_PRINTERS_PAGES_TEST, nargs='?', metavar=('date_test'), const='now',action="append")
         parser.add_argument(VARIOR.ARG_SEND_EMAIL_SHORT, VARIOR.ARG_SEND_EMAIL_LONG,
@@ -89,7 +93,7 @@ class App:
 
         if app_args.version     : arg_list.append({"arg_name": f"{VARIOR.ARG_VERSION_LONG}"})
         if app_args.saveprncntrs: arg_list.append({"arg_name": f"{VARIOR.ARG_PRINTERS_PAGES_COUNTER_LONG}","option_spc":app_args.saveprncntrs[0]})
-        if app_args.repprncntrs : arg_list.append({"arg_name": f"{VARIOR.ARG_PRINTERS_PAGES_REPORT_LONG}","dates":app_args.repprncntrs[0]})
+        if app_args.repprncntrs : arg_list.append({"arg_name": f"{VARIOR.ARG_PRINTERS_PAGES_REPORT_LONG}","options_rpc":app_args.repprncntrs[0]})
         if app_args.testprncntrs: arg_list.append({"arg_name": f"{VARIOR.ARG_PRINTERS_PAGES_TEST_LONG}","date_tpc":app_args.testprncntrs[0]})
         if app_args.sendemail   : arg_list.append({"arg_name": f"{VARIOR.ARG_SEND_EMAIL_LONG}", "date_se": app_args.sendemail[0]})
 
@@ -128,13 +132,47 @@ class App:
                 priners = Printers
                 priners.get_counters(self,the_option)
     def __run_report(self,arg_list):
-        for item in arg_list:
-            if 'dates' in item and over.dk_is_date(item['dates'][0]) and over.dk_is_date(item['dates'][1]):
-                report = Report
-                report_str = report.get_printers_counts_report_long(self, item['dates'])
+        rep_names = VARIOR.REP_NAMES
+        parce_options = True
+        start_date = f'{str(datetime.date.today())}'
+        end_date  = f'{str(datetime.date.today()+datetime.timedelta(days=1))}'
 
-                #report_str = report.get_printers_counts_report_short(self, item['dates'])
-                print(report_str)
+        options = {'type':f'{VARIOR.REP_NAMES[0]}','start_date':f'{start_date}','end_date':f'{end_date}'}
+        report_str = 'Нет данных'
+        for item in arg_list:
+            if 'options_rpc' in item:
+                if len(item['options_rpc']) > 3:
+                    print('Количество аргументов не должно быть больше 3')
+                else:
+                    for opt_item in item['options_rpc']:
+                        match item['options_rpc'].index(opt_item):
+                            case 0:
+                                if opt_item in rep_names:
+                                    options['type'] = opt_item
+                                else:
+                                    parce_options = False
+                                    print(f'Певый аргумент должен быть {rep_names}')
+                            case 1:
+                                if over.dk_is_date(opt_item):
+                                    date_end = str((datetime.datetime.strptime(opt_item,'%Y-%m-%d')+datetime.timedelta(days=1)).strftime('%Y-%m-%d'))
+                                    options['start_date'] = f'{opt_item}'
+                                    options['end_date'] = f'{date_end}'
+                                else:
+                                    parce_options = False
+                            case 2:
+                                if over.dk_is_date(opt_item):options['end_date'] = f'{opt_item}'
+                                else:
+                                    parce_options = False
+                    if parce_options:
+                        report = Report
+                        dates = (options['start_date'],options['end_date'])
+                        match options['type']:
+                            case 'short':
+                                report_str = report.get_printers_counts_report_short(self, dates)
+                            case 'long':
+                                report_str = report.get_printers_counts_report_long(self, dates)
+        print(report_str)
+        # print(options)
     def __run_test(self,arg_list):
         log_level = VARIOR.LOG_LEVEL_ERROR
         log_message = 'Не удалось запустить тест : ошибка App.__run_test(self,arg_list)'

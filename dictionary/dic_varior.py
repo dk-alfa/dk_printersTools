@@ -37,3 +37,5 @@ LOG_LEVEL_NOTICE     = 5
 LOG_LEVEL_INFO       = 6
 LOG_LEVEL_DEBUG      = 7
 LOG_TO_EMAIL         = True
+
+REP_NAMES = ('short','long','over')

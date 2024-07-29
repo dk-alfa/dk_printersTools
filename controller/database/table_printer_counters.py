@@ -94,6 +94,7 @@ class TablePrinterCounters:
                         cursor.execute(sql_str)
                         response = query_list = cursor.fetchall()
                         if response: ret = response
+                        # print (ret)
                         # for item in response:
                         #     print(item)
                             # str1 = item[5].encode('utf8')
