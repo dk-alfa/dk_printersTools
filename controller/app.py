@@ -134,8 +134,8 @@ class App:
     def __run_report(self,arg_list):
         rep_names = VARIOR.REP_NAMES
         parce_options = True
-        start_date = f'{str(datetime.date.today())}'
-        end_date  = f'{str(datetime.date.today()+datetime.timedelta(days=1))}'
+        end_date = f'{str(datetime.date.today())}'
+        start_date  = f'{str(datetime.date.today()-datetime.timedelta(days=1))}'
 
         options = {'type':f'{VARIOR.REP_NAMES[0]}','start_date':f'{start_date}','end_date':f'{end_date}'}
         report_str = 'Нет данных'

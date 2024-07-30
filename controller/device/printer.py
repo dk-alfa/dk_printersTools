@@ -12,11 +12,12 @@ import re
 
 class Printers:
     def get_counters(self,option):
+        device_type = (VARIOR.DEVICE_TYPE_PRINTER, VARIOR.DEVICE_TYPE_MFU)
         if not option :
+            defice_type = (VARIOR.DEVICE_TYPE_PRINTER, VARIOR.DEVICE_TYPE_MFU)
             #printers_list = Printers.__get_priners_list_test(self)
-            printers_list = Printers.__get_printers_list_from_table(self, defice_type)
+            printers_list = Printers.__get_printers_list_from_table(self, device_type)
         else          : printers_list = Printers.__get_printer_by_dict(self,option)
-        defice_type = (VARIOR.DEVICE_TYPE_PRINTER, VARIOR.DEVICE_TYPE_MFU)
         if printers_list:
             for printer_info in printers_list:
                 try:
