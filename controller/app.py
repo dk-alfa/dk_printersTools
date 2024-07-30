@@ -172,7 +172,6 @@ class App:
                             case 'long':
                                 report_str = report.get_printers_counts_report_long(self, dates)
         print(report_str)
-        # print(options)
     def __run_test(self,arg_list):
         log_level = VARIOR.LOG_LEVEL_ERROR
         log_message = 'Не удалось запустить тест : ошибка App.__run_test(self,arg_list)'

@@ -94,12 +94,6 @@ class TablePrinterCounters:
                         cursor.execute(sql_str)
                         response = query_list = cursor.fetchall()
                         if response: ret = response
-                        # print (ret)
-                        # for item in response:
-                        #     print(item)
-                            # str1 = item[5].encode('utf8')
-                            # print(item[0], f"[{item[1].strftime('%Y-%m-%d %H:%M')}]",f"[{item[2].strftime('%Y-%m-%d %H:%M')}],"\
-                            #       f" {item[3]}, {item[4]}, print dif:{item[4] - item[3]}, {item[5]}, {item[6]}, {item[8]}_{item[7]} {item[11]}")
                     except Exception as _ex:
                         print(f"[ERROR] Ошибка в модуле [(table_printer_counters.py) "
                               f"table_printer_counters.get_reports_by_two_dates(self,dates)] не удалось выполнить запрос {sql_str} {_ex}")
