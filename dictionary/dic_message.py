@@ -1,5 +1,5 @@
 import sys
-APP_VERSION     = 'dk_printersTools 1.0.3 2024.07.18 Writen by Dmitry Korablev'
+APP_VERSION     = 'dk_printersTools 1.0.4 2024.07.30 Writen by Dmitry Korablev'
 ARG_VERSION_HELP= 'Показать версию'
 ARG_PRINTERS_PAGES_COUNTER = f'Сохранить счетчики принтеров пример: [python] {sys.argv[0]} -spc id=28 или [python] {sys.argv[0]} -spc ip=172.16.1.231'
 ARG_PRINTERS_PAGES_REPORT = f'Создать отчет пример: [python] {sys.argv[0]} -rpc 2024-07-09 2024-07-10'
