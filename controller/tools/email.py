@@ -5,6 +5,7 @@ from email.mime.text import MIMEText
 from email.header    import Header
 from email.mime.multipart import MIMEMultipart
 import dictionary.dic_varior as VARIOR
+import dictionary.dic_message as MESSAGE
 
 class Email:
 
@@ -61,4 +62,4 @@ class Email:
             s.sendmail(msg['From'],msg['To'], msg.as_string())
         finally:
             s.quit()
-            print('Сообщение отправлено')
+            print(MESSAGE.EMAIL_MESSAGE_IS_SEND)

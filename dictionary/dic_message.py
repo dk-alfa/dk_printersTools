@@ -10,3 +10,5 @@ INFO_PRINTERS_LIST_IS_EMPTY = '[INFO] Список принтеров пуст'
 INFO_PRINTERS_COUNTERS_LIST_IS_EMPTY = 'Не найдено ни одной записи о счетчиках принтеров'
 INFO_PRINTERS_COUNTERS_NOT_FOUND =     'Не найдены записи о счетчиках следующих принтеров:'
 INFO_PRINTERS_COUNTERS_ALL_FOUND =     'Найдены записи обо всех счетчиках принтеров'
+
+EMAIL_MESSAGE_IS_SEND = "Сообщение отправлено"

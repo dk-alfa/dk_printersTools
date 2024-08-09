@@ -499,6 +499,11 @@ class Printer:
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         content_table = soup.find(id='tonertab')
         content_table_td = soup.find_all('td')
+        # i=0
+        # for item in content_table_td:
+        #     i = i+1
+        #     print(f'=={i}==')
+        #     print(item)
         сartridge_filling = content_table_td[12].text[:-1]
         driver.switch_to.parent_frame()
 
@@ -511,7 +516,7 @@ class Printer:
         pr_counters = {'print_print':f'{content_table_td[14].text}',
                        'print_copy' : f'{content_table_td[15].text}',
                        'print_sum'  :f'{content_table_td[16].text}'}
-        pr_counters.update({'сartridge_filling':f'{сartridge_filling}'})
+        # pr_counters.update({'сartridge_filling':f'{сartridge_filling}'})
         Printer.__save_to_table(self, printer_info, pr_counters)
     def __get_counters_BROTHER_MFC_L2740DW(self, printer_info):
         # driver = Printer.__init_printer_type_3(self, printer_info)
