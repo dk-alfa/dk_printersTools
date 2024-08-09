@@ -40,7 +40,6 @@ class TablePrinterCounters:
             data = data + f'{item},'
         data = data[:-1]
         sql_str = f'INSERT INTO printer_counters ({fields}) VALUES ({data});'
-        print(f'=={sql_str}')
         try:
             connection = TablePrinterCounters.__init_table()
             if connection:
