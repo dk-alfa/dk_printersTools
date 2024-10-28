@@ -1,5 +1,7 @@
 from selenium import webdriver    as wd
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 from lxml import etree
 import dictionary.dic_message     as MESSAGE
@@ -24,7 +26,7 @@ class Printers:
                     printer = Printer
                     printer_counters = printer.get_counters(self,printer_info)
                 except Exception as _ex:
-                        print(f"{ERROR.CANT_CREATE_PRINTER} {_ex}")
+                        print(f"Ошибка в модуле [(printer.py) Printers.get_counters]  {ERROR.CANT_CREATE_PRINTER} {_ex}")
         else:
                 print(f"{MESSAGE.INFO_PRINTERS_LIST_IS_EMPTY} (Printers.get_counters)")
 
@@ -133,7 +135,8 @@ class Printer:
         if device_model == 'KYOCERA_ECOSYS_M2040dn':
             Printer.__get_counters_KYOCERA_ECOSYS_M2040dn(self,printer_info)
         if device_model == 'KYOCERA_ECOSYS_M2135dn':
-            Printer.__get_counters_KYOCERA_ECOSYS_M2040dn(self,printer_info)
+            Printer.__get_counters_KYOCERA_ECOSYS_M2135dn(self, printer_info)
+            #Printer.__get_counters_KYOCERA_ECOSYS_M2040dn(self,printer_info)
         if device_model == 'KYOCERA_ECOSYS_FS_1035MFP':
             Printer.__get_counters_KYOCERA_ECOSYS_FS_1035MFP(self,printer_info)
         if device_model == 'KYOCERA_ECOSYS_FS_2100dn':
@@ -215,8 +218,12 @@ class Printer:
         t_printer_counters.save_to_table_by_dict(self, printer_counters)
     def __get_counters_KYOCERA_ECOSYS_M2735dn(self,printer_info):
         driver = Printer.__init_printer_type_1(self,printer_info)
-        driver.find_element(By.XPATH,'//*[@id="tm2"]/div[1]/span').click()
+
+        item_menu_1 = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="tm2"]/div[1]/span')))
+        item_menu_1.click()
         driver.find_element(By.XPATH, '//*[@id="s81"]').click()
+        time.sleep(3)
 
         frame = driver.find_element(By.NAME, 'deviceconfig')
         driver.switch_to.frame(frame)
@@ -247,11 +254,16 @@ class Printer:
 
         t_printer_counters = T_PRINTER_COUNTERS.TablePrinterCounters
         t_printer_counters.save_to_table_by_dict(self, printer_counters)
-    def __get_counters_KYOCERA_ECOSYS_P2040dn(self,printer_info):
 
+    def __get_counters_KYOCERA_ECOSYS_P2040dn(self,printer_info):
         driver = Printer.__init_printer_type_1(self,printer_info)
-        driver.find_element(By.XPATH,'//*[@id="tm2"]/div[1]/span').click()
+
+        item_menu_1 = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="tm2"]/div[1]/span')))
+        item_menu_1.click()
         driver.find_element(By.XPATH, '//*[@id="s81"]').click()
+        time.sleep(3)
+
         frame = driver.find_element(By.NAME, 'deviceconfig')
         driver.switch_to.frame(frame)
         soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -298,12 +310,59 @@ class Printer:
         t_printer_counters.save_to_table_by_dict(self, printer_counters)
     def __get_counters_KYOCERA_ECOSYS_M2035dn(self,printer_info):
         Printer.__get_counters_KYOCERA_ECOSYS_M3040dn(self,printer_info)
+    def __get_counters_KYOCERA_ECOSYS_M2135dn(self, printer_info):
+        driver = Printer.__init_printer_type_1(self, printer_info)
+        try:
+            item_menu_1 = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="tm2"]/div[1]/span/span')))
+            item_menu_1.click()
+            driver.find_element(By.XPATH, '//*[@id="s81"]').click()
+            time.sleep(3)
+
+            frame = driver.find_element(By.NAME, 'deviceconfig')
+            driver.switch_to.frame(frame)
+            soup = BeautifulSoup(driver.page_source, 'html.parser')
+            content_table = soup.find(id='contentrow')
+            content_table_td = soup.find_all('td')
+            pr_counters = {'print_copy': f'{content_table_td[15].text}',
+                           'print_print': f'{content_table_td[22].text}',
+                           'print_sum': f'{content_table_td[28].text}'}
+            driver.switch_to.parent_frame()
+
+            frame = driver.find_element(By.NAME, 'deviceabout')
+            driver.switch_to.frame(frame)
+            soup = BeautifulSoup(driver.page_source, 'html.parser')
+            content_table = soup.find(id='contentrow')
+            content_table_td = soup.find_all('td')
+            sc_counters = {'scan_copy': f'{content_table_td[8].text}',
+                           'scan_over': f'{content_table_td[14].text}',
+                           'scan_sum': f'{content_table_td[20].text}'}
+            driver.switch_to.parent_frame()
+
+            printer_counters = {'id_device': f'{printer_info["id_device"]}'}
+            printer_counters.update(pr_counters)
+            printer_counters.update(sc_counters)
+
+            t_printer_counters = T_PRINTER_COUNTERS.TablePrinterCounters
+            t_printer_counters.save_to_table_by_dict(self, printer_counters)
+        except Exception as _ex:
+            print(f"Ошибка в модуле [(printer.py) Printers.__get_counters_KYOCERA_ECOSYS_M2135dn]  {ERROR.CANT_CREATE_PRINTER} {_ex}")
     def __get_counters_KYOCERA_ECOSYS_M2040dn(self,printer_info):
         driver = Printer.__init_printer_type_1(self, printer_info)
         try:
-            driver.find_element(By.XPATH,'//*[@id="tm2"]/div[1]/span/span').click()
+            #driver.find_element(By.XPATH,'//*[@id="tm2"]/div[1]/span/span').click()
+            #time.sleep(3)
+            item_menu_1 = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="tm2"]/div[1]/span/span')))
+            item_menu_1.click()
+            driver.find_element(By.XPATH, '//*[@id="s81"]').click()
+            time.sleep(3)
         except:
+            item_menu_1 = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="tm2"]/div[1]/span')))
+            item_menu_1.click()
             driver.find_element(By.XPATH, '//*[@id="tm2"]/div[1]/span').click()
+            time.sleep(3)
 
         frame = driver.find_element(By.ID, 'toner')
         driver.switch_to.frame(frame)
@@ -384,6 +443,7 @@ class Printer:
         driver = Printer.__init_printer_type_1(self, printer_info)
         Printer.__login_to_printer(self,driver,printer_info)
         driver.find_element(By.XPATH,'//*[@id="settingcolor"]/td[3]/a').click()
+        time.sleep(5)
         driver.switch_to.default_content()
         frame = driver.find_element(By.NAME, 'main')
         driver.switch_to.frame(frame)
@@ -410,7 +470,9 @@ class Printer:
     def __get_counters_KYOCERA_ECOSYS_M3145dn(self, printer_info):
         driver = Printer.__init_printer_type_1(self, printer_info)
         driver.find_element(By.XPATH, '//*[@id="tm2"]/div[1]/span').click()
+        time.sleep(3)
         driver.find_element(By.XPATH, '//*[@id="s81"]').click()
+        time.sleep(3)
 
         frame = driver.find_element(By.NAME, 'deviceconfig')
         driver.switch_to.frame(frame)
@@ -450,7 +512,9 @@ class Printer:
     def __get_counters_KYOCERA_ECOSYS_P3150dn(self, printer_info):
         driver = Printer.__init_printer_type_1(self, printer_info)
         driver.find_element(By.XPATH, '//*[@id="tm2"]/div[1]/span/span').click()
+        time.sleep(3)
         driver.find_element(By.XPATH, '//*[@id="s81"]').click()
+        time.sleep(3)
 
         frame = driver.find_element(By.NAME, 'deviceconfig')
         driver.switch_to.frame(frame)
@@ -465,6 +529,7 @@ class Printer:
     def __get_counters_KYOCERA_FS_1370dn(self,printer_info):
         driver = Printer.__init_printer_type_2(self, printer_info)
         driver.find_element(By.XPATH, '//*[@id="leftcolmn"]/div/div[11]/a').click()
+        time.sleep(3)
 
         content_string = Printer.__get_content(self, driver)
         print_print = Printer.__get_count(self, content_string, 'sName\\[0\\]')
