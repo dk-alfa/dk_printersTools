@@ -378,6 +378,7 @@ class Printer:
         driver.switch_to.frame(frame)
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         content_table = soup.find(id = 'contentrow')
+      #  print(content_table)
         content_table_td = soup.find_all('td')
         pr_counters = {'print_copy' :f'{content_table_td[15].text}',
                       'print_print':f'{content_table_td[22].text}',
